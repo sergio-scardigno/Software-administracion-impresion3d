@@ -9,6 +9,8 @@ class GastoFijo extends Model
 {
     use HasFactory;
 
+    protected $table = 'gastos_fijos'; // Nombre de la tabla correcta
+
     protected $primaryKey = 'id_gasto';
 
     protected $fillable = [

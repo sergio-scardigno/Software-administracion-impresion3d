@@ -9,7 +9,9 @@ class Salario extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id_salario';
+    protected $table = 'salarios';
+
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'tipo_trabajador', 'salario_mensual'

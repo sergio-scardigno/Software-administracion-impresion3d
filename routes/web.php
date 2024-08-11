@@ -9,10 +9,13 @@ use App\Http\Controllers\TrabajadorController;
 use App\Http\Controllers\ModeloController;
 
 Route::resource('maquinas', MaquinaController::class);
-Route::resource('gastos-fijos', GastoFijoController::class);
+Route::resource('gastos_fijos', GastoFijoController::class);
 Route::resource('salarios', SalarioController::class);
 Route::resource('impresiones', ImpresionController::class);
-Route::resource('trabajadores', TrabajadorController::class);
+Route::resource('trabajadores', TrabajadorController::class)->parameters([
+    'trabajadores' => 'trabajador'
+]);
+
 Route::resource('modelos', ModeloController::class);
 
 Route::get('/', function () {

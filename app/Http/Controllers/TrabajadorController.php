@@ -1,64 +1,64 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Trabajador;
+use App\Models\Salario;
 use Illuminate\Http\Request;
 
 class TrabajadorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $trabajadores = Trabajador::all();
+        $salarios = Salario::all();
+        
+        return view('trabajadores.index', compact('trabajadores', 'salarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'tipo' => 'required|exists:salarios,id', // Validar que tipo sea un ID válido en la tabla salarios
+            'salario_id' => 'required|exists:salarios,id', // Validar que salario_id sea un ID válido en la tabla salarios
+        ]);
+
+        Trabajador::create($request->all());
+
+        return redirect()->route('trabajadores.index')
+                         ->with('success', 'Trabajador creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Trabajador $trabajador)
     {
-        //
+        return view('trabajadores.show', compact('trabajador'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Trabajador $trabajador)
     {
-        //
+        $salarios = Salario::all();
+        return view('trabajadores.edit', compact('trabajador', 'salarios'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Trabajador $trabajador)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'tipo' => 'required|exists:salarios,id', // Validar que tipo sea un ID válido en la tabla salarios
+            'salario_id' => 'required|exists:salarios,id', // Validar que salario_id sea un ID válido en la tabla salarios
+        ]);
+
+        $trabajador->update($request->all());
+
+        return redirect()->route('trabajadores.index')
+                         ->with('success', 'Trabajador actualizado exitosamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Trabajador $trabajador)
     {
-        //
+        $trabajador->delete();
+
+        return redirect()->route('trabajadores.index')
+                         ->with('success', 'Trabajador eliminado exitosamente.');
     }
 }

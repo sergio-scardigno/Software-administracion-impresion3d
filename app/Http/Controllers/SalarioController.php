@@ -3,62 +3,69 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Salario;
 
 class SalarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $salarios = Salario::all();
+        return view('salarios.index', compact('salarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('salarios.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'tipo_trabajador' => 'required',
+            'salario_mensual' => 'required|numeric',
+        ]);
+
+        Salario::create($request->all());
+
+        return redirect()->route('salarios.index')
+                         ->with('success', 'Salario creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Salario $salario)
     {
-        //
+        return view('salarios.show', compact('salario'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $salario = Salario::find($id);
+        return view('salarios.edit', compact('salario'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Salario $salario)
     {
-        //
+        // dd($salario);
+
+        $request->validate([
+            'tipo_trabajador' => 'required',
+            'salario_mensual' => 'required|numeric',
+        ]);
+
+        // dd($request);
+    
+        $salario->update(array_merge($salario->toArray(), $request->all()));
+    
+        // dd( $salario);
+
+        return redirect()->route('salarios.index')
+                         ->with('success', 'Salario actualizado exitosamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Salario $salario)
     {
-        //
+        $salario->delete();
+
+        return redirect()->route('salarios.index')
+                         ->with('success', 'Salario eliminado exitosamente.');
     }
 }
