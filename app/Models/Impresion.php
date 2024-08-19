@@ -9,6 +9,8 @@ class Impresion extends Model
 {
     use HasFactory;
 
+    protected $table = 'impresiones';
+
     protected $primaryKey = 'id_impresion';
 
     protected $fillable = [
