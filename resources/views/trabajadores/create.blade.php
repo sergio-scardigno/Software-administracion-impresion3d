@@ -1,24 +1,33 @@
 @extends('layout')
 
 @section('content')
-    <h1>Crear Trabajador</h1>
+<div class="container">
+    <h1 class="mb-4">Crear Trabajador</h1>
 
     <form method="POST" action="{{ route('trabajadores.store') }}">
         @csrf
 
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre"><br><br>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" required>
+        </div>
 
-        <label for="tipo">Tipo:</label>
-        <input type="number" name="tipo"><br><br>
+        <div class="mb-3">
+            <label for="tipo" class="form-label">Tipo:</label>
+            <input type="number" id="tipo" name="tipo" class="form-control" required>
+        </div>
 
-        <label for="salario_id">Salario:</label>
-        <select name="salario_id">
-            @foreach(Salario::all() as $salario)
-                <option value="{{ $salario->id }}">{{ $salario->nombre }}</option>
-            @endforeach
-        </select><br><br>
+        <div class="mb-3">
+            <label for="salario_id" class="form-label">Salario:</label>
+            <select id="salario_id" name="salario_id" class="form-select" required>
+                @foreach(Salario::all() as $salario)
+                    <option value="{{ $salario->id }}">{{ $salario->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
 
-        <input type="submit" value="Crear Trabajador">
+        <button type="submit" class="btn btn-primary">Crear Trabajador</button>
     </form>
+</div>
+
 @endsection

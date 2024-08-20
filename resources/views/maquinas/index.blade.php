@@ -1,9 +1,17 @@
 @extends('layout')
 
 @section('content')
-    <h1>Lista de Máquinas</h1>
-    <a href="{{ route('maquinas.create') }}">Crear nueva máquina</a>
-    <table>
+<div class="container">
+    <h1 class="mb-4">Lista de Máquinas</h1>
+    <a href="{{ route('maquinas.create') }}" class="btn btn-primary mb-3">Crear nueva máquina</a>
+
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            {{ $message }}
+        </div>
+    @endif
+
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -25,16 +33,18 @@
                     <td>{{ $maquina->intervalo_servicio_horas }}</td>
                     <td>{{ $maquina->costo_servicio }}</td>
                     <td>
-                        <a href="{{ route('maquinas.show', $maquina->id_maquina) }}">Ver</a>
-                        <a href="{{ route('maquinas.edit', $maquina->id_maquina) }}">Editar</a>
-                        <form action="{{ route('maquinas.destroy', $maquina->id_maquina) }}" method="POST" style="display:inline">
+                        <a href="{{ route('maquinas.show', $maquina->id_maquina) }}" class="btn btn-info btn-sm">Ver</a>
+                        <a href="{{ route('maquinas.edit', $maquina->id_maquina) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ route('maquinas.destroy', $maquina->id_maquina) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
+
 @endsection

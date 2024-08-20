@@ -1,32 +1,35 @@
 @extends('layout')
 
 @section('content')
-    <h1>Detalles de la Máquina</h1>
+<div class="container">
+    <h1 class="mb-4">Detalles de la Máquina</h1>
 
-    <div>
+    <div class="mb-3">
         <strong>Nombre:</strong>
-        {{ $maquina->nombre }}
+        <p>{{ $maquina->nombre }}</p>
     </div>
-    <div>
+    <div class="mb-3">
         <strong>Fecha de Compra:</strong>
-        {{ $maquina->fecha_compra }}
+        <p>{{ $maquina->fecha_compra }}</p>
     </div>
-    <div>
+    <div class="mb-3">
         <strong>Vida Útil (Años):</strong>
-        {{ $maquina->vida_util_anios }}
+        <p>{{ $maquina->vida_util_anios }}</p>
     </div>
-    <div>
+    <div class="mb-3">
         <strong>Costo:</strong>
-        {{ $maquina->costo }}
+        <p>{{ $maquina->costo }}</p>
     </div>
-    <div>
+    <div class="mb-3">
         <strong>Intervalo de Servicio (Horas):</strong>
-        {{ $maquina->intervalo_servicio_horas }}
+        <p>{{ $maquina->intervalo_servicio_horas }}</p>
     </div>
-    <div>
+    <div class="mb-3">
         <strong>Costo de Servicio:</strong>
-        {{ $maquina->costo_servicio }}
+        <p>{{ $maquina->costo_servicio }}</p>
     </div>
 
-    <a href="{{ route('maquinas.index') }}">Volver</a>
+    <a href="{{ route('maquinas.index') }}" class="btn btn-secondary">Volver</a>
+</div>
+
 @endsection

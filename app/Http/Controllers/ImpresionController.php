@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Impresion;
+use App\Models\Trabajador;
+use App\Models\Maquina;
+
 use Illuminate\Http\Request;
 
 class ImpresionController extends Controller
@@ -15,23 +18,27 @@ class ImpresionController extends Controller
 
     public function create()
     {
-        return view('impresiones.create');
+        $trabajadores = Trabajador::all();
+        $maquinas = Maquina::all();
+        return view('impresiones.create', compact('trabajadores', 'maquinas'));
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
+    
         $request->validate([
-            'id_maquina' => 'required|exists:maquinas,id_maquina',
-            'id_trabajador' => 'required|exists:trabajadores,id_trabajador',
+            'id_maquina' => 'required',
+            'id_trabajador' => 'required',
             'fecha_inicio' => 'required|date',
             'horas_impresion' => 'required|integer',
             'dimension_x' => 'required|numeric',
             'dimension_y' => 'required|numeric',
             'dimension_z' => 'required|numeric',
         ]);
-
+    
         Impresion::create($request->all());
-
+    
         return redirect()->route('impresiones.index')->with('success', 'Impresión creada con éxito.');
     }
 

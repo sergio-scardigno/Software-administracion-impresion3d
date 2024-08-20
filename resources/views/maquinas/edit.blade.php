@@ -1,10 +1,11 @@
 @extends('layout')
 
 @section('content')
-    <h1>Editar Máquina</h1>
+<div class="container">
+    <h1 class="mb-4">Editar Máquina</h1>
 
     @if ($errors->any())
-        <div>
+        <div class="alert alert-danger">
             <strong>Whoops!</strong> Hubo algunos problemas con su entrada.<br><br>
             <ul>
                 @foreach ($errors->all() as $error)
@@ -18,30 +19,38 @@
         @csrf
         @method('PUT')
 
-        <div>
-            <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" value="{{ $maquina->nombre }}">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre', $maquina->nombre) }}">
         </div>
-        <div>
-            <label for="fecha_compra">Fecha de Compra:</label>
-            <input type="date" name="fecha_compra" value="{{ $maquina->fecha_compra }}">
+
+        <div class="mb-3">
+            <label for="fecha_compra" class="form-label">Fecha de Compra:</label>
+            <input type="date" class="form-control" id="fecha_compra" name="fecha_compra" value="{{ old('fecha_compra', $maquina->fecha_compra) }}">
         </div>
-        <div>
-            <label for="vida_util_anios">Vida Útil (Años):</label>
-            <input type="number" name="vida_util_anios" value="{{ $maquina->vida_util_anios }}">
+
+        <div class="mb-3">
+            <label for="vida_util_anios" class="form-label">Vida Útil (Años):</label>
+            <input type="number" class="form-control" id="vida_util_anios" name="vida_util_anios" value="{{ old('vida_util_anios', $maquina->vida_util_anios) }}">
         </div>
-        <div>
-            <label for="costo">Costo:</label>
-            <input type="number" step="0.01" name="costo" value="{{ $maquina->costo }}">
+
+        <div class="mb-3">
+            <label for="costo" class="form-label">Costo:</label>
+            <input type="number" step="0.01" class="form-control" id="costo" name="costo" value="{{ old('costo', $maquina->costo) }}">
         </div>
-        <div>
-            <label for="intervalo_servicio_horas">Intervalo de Servicio (Horas):</label>
-            <input type="number" name="intervalo_servicio_horas" value="{{ $maquina->intervalo_servicio_horas }}">
+
+        <div class="mb-3">
+            <label for="intervalo_servicio_horas" class="form-label">Intervalo de Servicio (Horas):</label>
+            <input type="number" class="form-control" id="intervalo_servicio_horas" name="intervalo_servicio_horas" value="{{ old('intervalo_servicio_horas', $maquina->intervalo_servicio_horas) }}">
         </div>
-        <div>
-            <label for="costo_servicio">Costo de Servicio:</label>
-            <input type="number" step="0.01" name="costo_servicio" value="{{ $maquina->costo_servicio }}">
+
+        <div class="mb-3">
+            <label for="costo_servicio" class="form-label">Costo de Servicio:</label>
+            <input type="number" step="0.01" class="form-control" id="costo_servicio" name="costo_servicio" value="{{ old('costo_servicio', $maquina->costo_servicio) }}">
         </div>
-        <button type="submit">Actualizar</button>
+
+        <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>
+</div>
+
 @endsection
