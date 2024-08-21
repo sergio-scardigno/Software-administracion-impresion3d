@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Gastos Fijos</h1>
+    <h1 class="mb-4">Gastos</h1>
     
-    <a href="{{ route('gastos_fijos.create') }}" class="btn btn-primary mb-3">Agregar Gasto Fijo</a>
+    <a href="{{ route('gastos_fijos.create') }}" class="btn btn-primary mb-3">Agregar Gasto</a>
     
     @if ($message = Session::get('success'))
         <div class="alert alert-success">

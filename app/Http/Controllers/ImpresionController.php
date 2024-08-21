@@ -35,6 +35,9 @@ class ImpresionController extends Controller
             'dimension_x' => 'required|numeric',
             'dimension_y' => 'required|numeric',
             'dimension_z' => 'required|numeric',
+            'desperdicio' => 'required|numeric',
+            'cantidad_unidades' => 'required|numeric',
+            'venta' => 'required|numeric'
         ]);
     
         Impresion::create($request->all());
@@ -62,6 +65,9 @@ class ImpresionController extends Controller
             'dimension_x' => 'required|numeric',
             'dimension_y' => 'required|numeric',
             'dimension_z' => 'required|numeric',
+            'desperdicio' => 'required|numeric',
+            'cantidad_unidades' => 'required|numeric',
+            'venta' => 'required|numeric'
         ]);
 
         $impresion->update($request->all());

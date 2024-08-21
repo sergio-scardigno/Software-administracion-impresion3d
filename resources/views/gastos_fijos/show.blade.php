@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Detalle del Gasto Fijo</h1>
+    <h1 class="mb-4">Detalle del Gasto</h1>
 
     @if($gastoFijo)
         <div class="mb-3">

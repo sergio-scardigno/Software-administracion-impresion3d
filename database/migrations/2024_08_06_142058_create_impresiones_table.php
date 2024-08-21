@@ -23,6 +23,11 @@ return new class extends Migration
             $table->decimal('dimension_z', 10, 2);
             $table->timestamps();
 
+            // Nuevos campos añadidos
+            $table->decimal('desperdicio', 10, 2)->nullable();
+            $table->integer('cantidad_unidades')->default(1);
+            $table->integer('venta')->default(0);
+
             $table->foreign('id_maquina')->references('id_maquina')->on('maquinas')->onDelete('cascade');
             $table->foreign('id_trabajador')->references('id_trabajador')->on('trabajadores')->onDelete('cascade');
         });
