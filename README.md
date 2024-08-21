@@ -25,7 +25,7 @@ Precio de Venta = Costo Total×(1+Margen de Ganancia)
 
 # Modificaciones para hacer
 
-Para implementar todas las fórmulas necesarias para calcular el costo de impresión en tu base de datos, podrías considerar las siguientes modificaciones y ajustes en las tablas existentes:
+Para implementar todas las fórmulas necesarias para calcular el costo de impresión en tu base de datos, considerar las siguientes modificaciones y ajustes en las tablas existentes:
 
 ### 1. **Tabla `maquinas`**
 
@@ -68,5 +68,3 @@ Para implementar todas las fórmulas necesarias para calcular el costo de impres
 ### 9. **Optimización**
 
 -   **Índices en columnas clave:** Asegúrate de que las columnas que participarán en las consultas y cálculos frecuentes tengan índices para mejorar el rendimiento de las consultas.
-
-Estas modificaciones deberían permitirte implementar un sistema robusto para calcular y gestionar los costos de las impresiones en tu negocio de impresión 3D.
