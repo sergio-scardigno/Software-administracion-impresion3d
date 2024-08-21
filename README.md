@@ -11,7 +11,7 @@ Costo por Hora de la Maquina = ( Costo total de la maquina / Horas Utiles +
 
 Costo por Hora del Trabajador = Horas de Trabajo al Mes / Salario Mensual
 
-Costo de Materiales Cantidad de Material Usado x Costo por Unidad de Material
+Costo de Materiales = Cantidad de Material Usado x Costo por Unidad de Material
 
 Costo de Desperdicio = Cantidad de Material Desperdiciado x Costo por Unidad de Material
 
