@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+.github/*
 .env
 .env.backup
 .env.production
