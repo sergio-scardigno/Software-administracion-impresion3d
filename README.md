@@ -7,7 +7,7 @@ npm run build
 
 # Calculo de costo
 
-Costo por Hora de la Maquina = ( Costo total de la maquina / Horas Utiles + Costo de Mantenimiento / Horas Utiles)
+Costo por Hora de la Maquina = ( Costo total de la maquina + Costo de Mantenimiento ) / Horas Utiles
 
 Costo por Hora del Trabajador = Horas de Trabajo al Mes / Salario Mensual
 
@@ -17,7 +17,7 @@ Costo de Desperdicio = Cantidad de Material Desperdiciado x Costo por Uni
 
 # Total
 
-Costo Total = (Costo por Hora de la maquina x Horas de impresion) + (Costo por hora de trabajador + Horas de Impresion) + (Costo de Materiales + Costo de Desperdicio)
+Costo Total = (Costo por Hora de la maquina x Horas de impresion) + (Costo por hora de trabajador * Horas de Impresion) + (Costo de Materiales + Costo de Desperdicio)
 
 # Precio de Venta
 
