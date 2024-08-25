@@ -14,6 +14,6 @@ class GastoFijo extends Model
     protected $primaryKey = 'id_gasto';
 
     protected $fillable = [
-        'tipo_gasto', 'monto'
+        'tipo_gasto', 'monto', 'categoria'
     ];
 }

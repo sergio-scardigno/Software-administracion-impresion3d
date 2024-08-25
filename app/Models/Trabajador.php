@@ -14,7 +14,7 @@ class Trabajador extends Model
     protected $primaryKey = 'id_trabajador';
 
     protected $fillable = [
-        'nombre', 'tipo', 'salario_id'
+        'nombre', 'tipo', 'salario_id', 'costo_por_hora'
     ];
 
     public function salario()

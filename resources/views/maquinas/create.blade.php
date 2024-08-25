@@ -39,13 +39,24 @@
         </div>
 
         <div class="mb-3">
+            <label for="costo_energia_por_hora" class="form-label">Consumo de Energia por hora:</label>
+            <input type="number" step="0.01" class="form-control" id="costo_energia_por_hora" name="costo_energia_por_hora" value="{{ old('costo_energia_por_hora') }}">
+        </div>
+
+        <div class="mb-3">
             <label for="intervalo_servicio_horas" class="form-label">Intervalo de Servicio (Horas):</label>
             <input type="number" class="form-control" id="intervalo_servicio_horas" name="intervalo_servicio_horas" value="{{ old('intervalo_servicio_horas') }}">
         </div>
+        
 
         <div class="mb-3">
             <label for="costo_servicio" class="form-label">Costo de Servicio:</label>
             <input type="number" step="0.01" class="form-control" id="costo_servicio" name="costo_servicio" value="{{ old('costo_servicio') }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="costo_mantenimiento_por_hora" class="form-label">Costo de Mantenimiento por hora:</label>
+            <input type="number" step="0.01" class="form-control" id="costo_mantenimiento_por_hora" name="costo_mantenimiento_por_hora" value="{{ old('costo_mantenimiento_por_hora') }}">
         </div>
 
         <button type="submit" class="btn btn-primary">Crear</button>

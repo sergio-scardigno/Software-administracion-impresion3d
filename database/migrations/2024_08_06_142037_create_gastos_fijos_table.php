@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_gasto');
             $table->string('tipo_gasto');
             $table->decimal('monto', 10, 2);
+            $table->string('categoria');
             $table->timestamps();
         });
     }

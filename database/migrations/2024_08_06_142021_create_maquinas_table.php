@@ -19,7 +19,14 @@ return new class extends Migration
                 $table->integer('vida_util_anios');
                 $table->decimal('costo', 10, 2);
                 $table->integer('intervalo_servicio_horas');
+
+                // Costo del Service de mantenimiento
                 $table->decimal('costo_servicio', 10, 2);
+
+                // Nuevas columnas
+                $table->decimal('costo_energia_por_hora', 10, 2);
+                $table->decimal('costo_mantenimiento_por_hora', 10, 2);
+                $table->integer('horas_utilizadas')->nullable();
                 $table->timestamps();
             });
         }

@@ -14,7 +14,18 @@ class Impresion extends Model
     protected $primaryKey = 'id_impresion';
 
     protected $fillable = [
-        'id_maquina', 'id_trabajador', 'fecha_inicio', 'fecha_fin', 'horas_impresion', 'dimension_x', 'dimension_y', 'dimension_z'
+        'id_maquina', 
+        'id_trabajador', 
+        'fecha_inicio', 
+        'fecha_fin', 
+        'horas_impresion', 
+        'dimension_x', 
+        'dimension_y', 
+        'dimension_z',
+        'desperdicio', 
+        'cantidad_unidades', 
+        'venta',
+        'precio_venta'
     ];
 
     public function maquina()
@@ -25,5 +36,12 @@ class Impresion extends Model
     public function trabajador()
     {
         return $this->belongsTo(Trabajador::class, 'id_trabajador');
+    }
+
+    public function materiales()
+    {
+        return $this->belongsToMany(Material::class, 'impresion_material', 'id_impresion', 'id_material')
+                    ->withPivot('cantidad_usada', 'costo')
+                    ->withTimestamps();
     }
 }

@@ -7,15 +7,15 @@ npm run build
 
 # Calculo de costo
 
-Costo por Hora de la Maquina = ( Costo total de la maquina + Costo de Mantenimiento ) / Horas Utiles
+(Trabajando) Costo por Hora de la Maquina = ( Costo total de la maquina + Costo de Mantenimiento ) / Horas Utiles
 
 Costo por Hora del Trabajador = Horas de Trabajo al Mes / Salario Mensual
 
-Costo de materiales = (cantidad de material usado + cantidad de material desperdiciado) * costo por unidad de material.
+Costo de materiales = (cantidad de material usado + cantidad de material desperdiciado) \* costo por unidad de material.
 
 # Total
 
-Costo Total = (Costo por Hora de la maquina x Horas de impresion) + (Costo por hora de trabajador * Horas de Impresion) + (Costo de Materiales + Costo de Desperdicio)
+Costo Total = (Costo por Hora de la maquina x Horas de impresion) + (Costo por hora de trabajador \* Horas de Impresion) + (Costo de Materiales + Costo de Desperdicio)
 
 # Precio de Venta
 
@@ -25,7 +25,7 @@ Precio de Venta = Costo Total×(1+Margen de Ganancia)
 
 Para implementar todas las fórmulas necesarias para calcular el costo de impresión en tu base de datos, considerar las siguientes modificaciones y ajustes en las tablas existentes:
 
-### 1. **Tabla `maquinas`**
+TRABAJADO - ### 1. **Tabla `maquinas`**
 
 -   **Agregar una columna `costo_energia_por_hora`:** Para almacenar el costo de energía por hora de cada máquina.
 -   **Agregar una columna `costo_mantenimiento_por_hora`:** Para almacenar el costo de mantenimiento por hora.
@@ -33,7 +33,7 @@ Para implementar todas las fórmulas necesarias para calcular el costo de impres
 
 ### 2. **Tabla `trabajadores`**
 
--   **Agregar una columna `costo_por_hora`:** Para almacenar el costo por hora del trabajador, que puede calcularse con la relación entre el salario y las horas trabajadas.
+TRABAJADO - **Agregar una columna `costo_por_hora`:** Para almacenar el costo por hora del trabajador, que puede calcularse con la relación entre el salario y las horas trabajadas.
 
 ### 3. **Tabla `impresiones`**
 
@@ -44,20 +44,21 @@ Para implementar todas las fórmulas necesarias para calcular el costo de impres
 
 ### 4. **Tabla `gastos_fijos`**
 
--   **Agregar una columna `categoria`:** (si no está presente) para categorizar los gastos como energía, mantenimiento, etc., para facilitar la agregación y distribución de costos.
+TRABAJANDO - **Agregar una columna `categoria`:** (si no está presente) para categorizar los gastos como energía, mantenimiento, etc., para facilitar la agregación y distribución de costos.
 
 ### 5. **Nueva tabla `materiales`**
 
--   **Agregar una tabla `materiales`:** donde se registren todos los materiales utilizados en las impresiones, con columnas como `id_material`, `nombre`, `costo_por_unidad`, y `unidad_de_medida`. Esto permitirá relacionar las impresiones con los materiales utilizados.
+TRABAJANDO - **Agregar una tabla `materiales`:** donde se registren todos los materiales utilizados en las impresiones, con columnas como `id_material`, `nombre`, `costo_por_unidad`, y `unidad_de_medida`. Esto permitirá relacionar las impresiones con los materiales utilizados.
+
 -   **Tabla intermedia `impresion_material`:** Para manejar una relación muchos a muchos entre `impresiones` y `materiales`. Esta tabla podría incluir `id_impresion`, `id_material`, `cantidad_usada`, y `costo`.
 
 ### 6. **Cálculos y Procedimientos**
 
--   **Agregar triggers o stored procedures:** para actualizar automáticamente el costo total de la impresión (`costo_total`) cada vez que se actualicen las horas de impresión, el material utilizado, el trabajador asignado, etc.
+TRABAJANDO - **Agregar triggers o stored procedures:** para actualizar automáticamente el costo total de la impresión (`costo_total`) cada vez que se actualicen las horas de impresión, el material utilizado, el trabajador asignado, etc.
 
 ### 7. **Relaciones**
 
--   **Relacionar `impresiones` con `materiales`:** A través de la tabla intermedia `impresion_material`, para poder calcular los costos de los materiales de forma precisa.
+TRABAJANDO - **Relacionar `impresiones` con `materiales`:** A través de la tabla intermedia `impresion_material`, para poder calcular los costos de los materiales de forma precisa.
 
 ### 8. **Consulta de los Costos**
 

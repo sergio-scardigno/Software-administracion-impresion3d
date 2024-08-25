@@ -13,6 +13,10 @@
             <label for="monto" class="form-label">Monto:</label>
             <p class="form-control-plaintext">{{ $gastoFijo->monto }}</p>
         </div>
+        <div class="mb-3">
+            <label for="categoria" class="form-label">Categoria:</label>
+            <p class="form-control-plaintext">{{ $gastoFijo->categoria }}</p>
+        </div>
     @else
         <div class="alert alert-warning">No se encontró el gasto fijo.</div>
     @endif

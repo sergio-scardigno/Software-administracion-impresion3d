@@ -18,6 +18,7 @@
                 <th>ID</th>
                 <th>Tipo de Gasto</th>
                 <th>Monto</th>
+                <th>Categoria</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                     <td>{{ $gasto->id_gasto }}</td>
                     <td>{{ $gasto->tipo_gasto }}</td>
                     <td>{{ $gasto->monto }}</td>
+                    <td>{{ $gasto->categoria }}</td>
                     <td>
                         <a href="{{ route('gastos_fijos.show', $gasto->id_gasto) }}" class="btn btn-info btn-sm">Ver</a>
                         <a href="{{ route('gastos_fijos.edit', $gasto->id_gasto) }}" class="btn btn-warning btn-sm">Editar</a>

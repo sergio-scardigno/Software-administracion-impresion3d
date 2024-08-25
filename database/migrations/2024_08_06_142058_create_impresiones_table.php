@@ -28,6 +28,13 @@ return new class extends Migration
             $table->integer('cantidad_unidades')->default(1);
             $table->integer('venta')->default(0);
 
+            // Nuevas columnas
+            $table->decimal('costo_materiales', 10, 2);
+            $table->decimal('costo_desperdicio', 10, 2);
+            $table->decimal('costo_total', 10, 2);
+            $table->decimal('precio_venta', 10, 2)->nullable();
+
+            // Relaciones con otras tablas
             $table->foreign('id_maquina')->references('id_maquina')->on('maquinas')->onDelete('cascade');
             $table->foreign('id_trabajador')->references('id_trabajador')->on('trabajadores')->onDelete('cascade');
         });

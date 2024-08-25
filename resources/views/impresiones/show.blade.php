@@ -36,4 +36,29 @@
     </form>
 </div>
 
+
+<div class="container">
+    <h1>Detalles de la Impresión</h1>
+    <p><strong>ID Impresión:</strong> {{ $impresion->id_impresion }}</p>
+    <p><strong>Fecha de Inicio:</strong> {{ $impresion->fecha_inicio }}</p>
+    <p><strong>Fecha de Fin:</strong> {{ $impresion->fecha_fin }}</p>
+    <!-- Otros detalles de la impresión -->
+
+    <h3>Materiales Utilizados</h3>
+    <table class="table table-bordered">
+        <tr>
+            <th>Nombre del Material</th>
+            <th>Cantidad Usada</th>
+            <th>Costo</th>
+        </tr>
+        @foreach ($impresion->materiales as $material)
+        <tr>
+            <td>{{ $material->nombre }}</td>
+            <td>{{ $material->pivot->cantidad_usada }}</td>
+            <td>{{ $material->pivot->costo }}</td>
+        </tr>
+        @endforeach
+    </table>
+</div>
+
 @endsection

@@ -31,6 +31,7 @@ class GastoFijoController extends Controller
         $request->validate([
             'tipo_gasto' => 'required|string|max:255',
             'monto' => 'required|numeric',
+            'categoria' => 'string|numeric',
         ]);
 
         GastoFijo::create($request->all());
@@ -71,6 +72,7 @@ class GastoFijoController extends Controller
         $request->validate([
             'tipo_gasto' => 'required|string|max:255',
             'monto' => 'required|numeric',
+            'categoria' => 'required|string',
         ]);
 
         $gastoFijo->update($request->all());

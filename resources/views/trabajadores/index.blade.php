@@ -8,6 +8,7 @@
             <p><strong>Nombre:</strong> {{ $trabajador->nombre }}</p>
             <p><strong>Tipo:</strong> {{ $trabajador->tipo }}</p>
             <p><strong>Salario ID:</strong> {{ $trabajador->salario_id }}</p>
+            <p><strong>Costo por Hora:</strong> {{ number_format($trabajador->costo_por_hora, 2) }}</p> <!-- Mostrar el costo por hora -->
 
             <a href="{{ route('trabajadores.edit', ['trabajador' => $trabajador->id_trabajador]) }}" class="btn btn-warning btn-sm">Editar</a>
             <form method="POST" action="{{ route('trabajadores.destroy', ['trabajador' => $trabajador->id_trabajador]) }}" style="display:inline;">

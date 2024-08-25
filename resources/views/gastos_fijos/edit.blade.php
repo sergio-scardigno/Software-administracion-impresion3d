@@ -30,6 +30,11 @@
             <input type="text" class="form-control" id="monto" name="monto" value="{{ old('monto', $gastoFijo->monto) }}" required>
         </div>
 
+        <div class="mb-3">
+            <label for="categoria" class="form-label">Categoria</label>
+            <input type="text" class="form-control" id="categoria" name="categoria" value="{{ old('monto', $gastoFijo->categoria) }}" required>
+        </div>
+
         <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>
 

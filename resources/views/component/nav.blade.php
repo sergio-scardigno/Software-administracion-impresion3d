@@ -23,6 +23,9 @@
           <li class="nav-item">
             <a class="nav-link" href="/gastos_fijos">Gastos Fijos</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/materiales">Materiales</a>
+          </li>
         </ul>
       </div>
     </div>

@@ -21,9 +21,7 @@
         <select id="id_maquina" name="id_maquina" class="form-select" required>
             <option value="" disabled selected>Selecciona una máquina</option>
             @foreach ($maquinas as $maquina)
-
                 <option value="{{ $maquina->id_maquina }}">{{ $maquina->nombre }}</option>
-
             @endforeach
         </select>
     </div>
@@ -33,14 +31,10 @@
         <select id="id_trabajador" name="id_trabajador" class="form-select" required>
             <option value="" disabled selected>Selecciona un trabajador</option>
             @foreach ($trabajadores as $trabajador)
-
                 <option value="{{ $trabajador->id_trabajador }}">{{ $trabajador->nombre }}</option>
-
             @endforeach
         </select>
     </div>
-    
-    
     
     <div class="mb-3">
         <label for="fecha_inicio" class="form-label">Fecha de Inicio:</label>
@@ -73,26 +67,40 @@
     </div>
 
     <div class="mb-3">
-        <label for="cantidad_unidades" class="form-label">Cantidad unidades:</label>
-        <input type="number" step="0.01" id="cantidad_unidades" name="cantidad_unidades" class="form-control" value="{{ old('cantidad_unidades') }}" required>
+        <label for="cantidad_unidades" class="form-label">Cantidad de Unidades:</label>
+        <input type="number" id="cantidad_unidades" name="cantidad_unidades" class="form-control" value="{{ old('cantidad_unidades') }}" required>
     </div>
 
-    <div class="form-check">
-        <input type="radio" id="venta_no" name="venta" value="0" class="form-check-input" {{ old('venta', 0) == 0 ? 'checked' : '' }}>
-        <label for="venta_no" class="form-check-label">No está a la venta</label>
-    </div>
-    
-    <div class="form-check">
-        <input type="radio" id="venta_si" name="venta" value="1" class="form-check-input" {{ old('venta') == 1 ? 'checked' : '' }}>
-        <label for="venta_si" class="form-check-label">Está a la venta</label>
+    <div class="mb-3">
+        <label for="venta" class="form-label">Precio de Venta:</label>
+        <input type="number" step="0.01" id="venta" name="venta" class="form-control" value="{{ old('venta') }}" required>
     </div>
     
     <div class="mb-3">
-        <label for="desperdicio" class="form-label">Desperdicio:</label>
+        <label for="desperdicio" class="form-label">Desperdicio en Kilos:</label>
         <input type="number" step="0.01" id="desperdicio" name="desperdicio" class="form-control" value="{{ old('desperdicio') }}" required>
     </div>
 
+
+    <div class="mb-3">
+        <label for="material" class="form-label">Material:</label>
+        <select id="material" name="material" class="form-select" required>
+            <option value="" disabled selected>Selecciona un material</option>
+            @foreach ($materiales as $material)
+                <option value="{{ $material->id_material }}">{{ $material->nombre }}</option>
+            @endforeach
+        </select>
+    </div>
     
+    <div class="mb-3">
+        <label for="cantidad_usada" class="form-label">Cantidad Usada en kilos de material:</label>
+        <input type="number" step="0.01" id="cantidad_usada" name="cantidad_usada" class="form-control" value="{{ old('cantidad_usada') }}" required>
+    </div>
+
+    <p id="costoSugerido">Costo Sugerido del Producto: $0.00</p>
+
+    <button type="button" onclick="calcularCosto()">Calcular Costo</button>
+
     <button type="submit" class="btn btn-primary">Crear</button>
 </form>
 
@@ -100,4 +108,4 @@
 
 @endsection
 
-@vite('resources/js/all.js')
+@vite(['resources/js/all.js', 'resources/js/costos.js'])

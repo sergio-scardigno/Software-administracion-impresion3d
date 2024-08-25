@@ -19,11 +19,29 @@ class TrabajadorController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'tipo' => 'required|exists:salarios,id', // Validar que tipo sea un ID válido en la tabla salarios
-            'salario_id' => 'required|exists:salarios,id', // Validar que salario_id sea un ID válido en la tabla salarios
+            'tipo' => 'required|exists:salarios,id', 
+            'salario_id' => 'required|exists:salarios,id', 
         ]);
 
-        Trabajador::create($request->all());
+        // Obtener el salario mensual del ID proporcionado
+        $salario = Salario::find($request->salario_id);
+        if (!$salario) {
+            return redirect()->back()->withErrors(['salario_id' => 'El salario seleccionado no es válido.']);
+        }
+
+        // Calcular el costo por hora basado en el salario mensual
+        $horas_trabajadas_por_mes = 160; // 40 horas por semana * 4 semanas
+        $costo_por_hora = $salario->salario_mensual / $horas_trabajadas_por_mes;
+
+        // dd($costo_por_hora);
+
+        // Crear un nuevo trabajador con el costo por hora calculado
+        Trabajador::create([
+            'nombre' => $request->nombre,
+            'tipo' => $request->tipo,
+            'salario_id' => $request->salario_id,
+            'costo_por_hora' => $costo_por_hora,
+        ]);
 
         return redirect()->route('trabajadores.index')
                          ->with('success', 'Trabajador creado exitosamente.');
@@ -44,15 +62,32 @@ class TrabajadorController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'tipo' => 'required|exists:salarios,id', // Validar que tipo sea un ID válido en la tabla salarios
-            'salario_id' => 'required|exists:salarios,id', // Validar que salario_id sea un ID válido en la tabla salarios
+            'tipo' => 'required|exists:salarios,id',
+            'salario_id' => 'required|exists:salarios,id',
         ]);
-
-        $trabajador->update($request->all());
-
+    
+        // Obtener el salario mensual del ID proporcionado
+        $salario = Salario::find($request->salario_id);
+        if (!$salario) {
+            return redirect()->back()->withErrors(['salario_id' => 'El salario seleccionado no es válido.']);
+        }
+    
+        // Calcular el costo por hora basado en el salario mensual
+        $horas_trabajadas_por_mes = 160; // 40 horas por semana * 4 semanas
+        $costo_por_hora = $salario->salario_mensual / $horas_trabajadas_por_mes;
+    
+        // Actualizar el trabajador con el costo por hora calculado
+        $trabajador->update([
+            'nombre' => $request->nombre,
+            'tipo' => $request->tipo,
+            'salario_id' => $request->salario_id,
+            'costo_por_hora' => $costo_por_hora,
+        ]);
+    
         return redirect()->route('trabajadores.index')
                          ->with('success', 'Trabajador actualizado exitosamente.');
     }
+    
 
     public function destroy(Trabajador $trabajador)
     {
@@ -60,5 +95,20 @@ class TrabajadorController extends Controller
 
         return redirect()->route('trabajadores.index')
                          ->with('success', 'Trabajador eliminado exitosamente.');
+    }
+
+    public function obtenerDatos($id)
+    {
+        $trabajador = Trabajador::find($id);
+
+        if ($trabajador) {
+            return response()->json([
+                'trabajador_id' => $trabajador->id_trabajador,
+                'trabajador_nombre' => $trabajador->nombre,
+                'costo_por_hora' => $trabajador->costo_por_hora
+            ]);
+        } else {
+            return response()->json(['error' => 'Trabajador no encontrado'], 404);
+        }
     }
 }

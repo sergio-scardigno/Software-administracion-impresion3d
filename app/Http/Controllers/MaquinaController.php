@@ -10,6 +10,13 @@ class MaquinaController extends Controller
     public function index()
     {
         $maquinas = Maquina::all();
+
+        // Añadir el cálculo del Costo por Hora para cada máquina
+        foreach ($maquinas as $maquina) {
+            $horas_utiles = $maquina->vida_util_anios * 365 * 24; // Asumiendo 24 horas al día y 365 días al año
+            $maquina->costo_por_hora = ($maquina->costo + $maquina->costo_servicio) / $horas_utiles;
+        }
+
         return view('maquinas.index', compact('maquinas'));
     }
 
@@ -20,13 +27,16 @@ class MaquinaController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255',
             'fecha_compra' => 'required|date',
             'vida_util_anios' => 'required|integer',
             'costo' => 'required|numeric',
             'intervalo_servicio_horas' => 'required|integer',
             'costo_servicio' => 'required|numeric',
+            'costo_mantenimiento_por_hora' => 'required|numeric',
+            'horas_utilizadas' => 'nullable|integer', // Hacerlo opcional
         ]);
 
         Maquina::create($request->all());
@@ -54,6 +64,7 @@ class MaquinaController extends Controller
             'costo' => 'required|numeric',
             'intervalo_servicio_horas' => 'required|integer',
             'costo_servicio' => 'required|numeric',
+            'costo_mantenimiento_por_hora' => 'required|numeric'
         ]);
 
         $maquina->update($request->all());
@@ -69,4 +80,21 @@ class MaquinaController extends Controller
         return redirect()->route('maquinas.index')
                          ->with('success', 'Máquina eliminada exitosamente.');
     }
+
+
+    // Tomar el costo de hora de la maquina para la funcion de JS
+    public function obtenerDatos($id)
+    {
+        $maquina = Maquina::find($id);
+
+        if ($maquina) {
+            return response()->json([
+                'costo' => $maquina->costo,
+                'vida_util_anios' => $maquina->vida_util_anios
+            ]);
+        } else {
+            return response()->json(['error' => 'Máquina no encontrada'], 404);
+        }
+    }
+
 }

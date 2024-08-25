@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('tipo');
             $table->foreignId('salario_id')->constrained('salarios')->onDelete('cascade');
+            // Nueva columna
+            $table->decimal('costo_por_hora', 10, 2);
             $table->timestamps();
         });
     }

@@ -45,6 +45,26 @@
             @endforeach
         </tbody>
     </table>
+
+    <h4 class="my-4">Costo por Hora</h4>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Máquina</th>
+                <th>Costo por Hora (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($maquinas as $maquina)
+            <tr>
+                <td>{{ $maquina->nombre }}</td>
+                <td>{{ number_format($maquina->costo_por_hora, 2) }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    
+    
 </div>
 
 @endsection
