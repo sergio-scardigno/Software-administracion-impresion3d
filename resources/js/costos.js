@@ -93,7 +93,7 @@ function obtenerDatos(url, tipo) {
 function calcularCostos() {
     const { trabajador, maquina, material, valor_dolar } = datosObtenidos;
 
-    // Cálculo del Costo por Hora de la Máquina
+    // Cálculo del Costo por Hora de la Máquina (sin redondeo)
     const costoTotalMaquina = parseFloat(maquina.costo);
     const vidaUtilAnios = parseFloat(maquina.vida_util_anios);
     const horasUtiles = vidaUtilAnios * 365 * 24;
@@ -107,18 +107,22 @@ function calcularCostos() {
         document.getElementById("horas_impresion").value
     );
 
+    // Calculo del costo total de uso de la máquina (sin redondeo)
     const costoTotalUsoMaquina = costoPorHoraMaquina * horasImpresion;
     console.log(
         "Costo Total Uso de la Máquina para este trabajo:",
         costoTotalUsoMaquina
     );
 
-    const costoPorHoraTrabajador = parseFloat(trabajador.costo_por_hora);
+    let costoPorHoraTrabajador = parseFloat(trabajador.costo_por_hora);
+    costoPorHoraTrabajador = Math.round(costoPorHoraTrabajador);
 
     // Supongamos que el trabajador efectivamente trabaja un 10% del tiempo total de impresión
-    const horasEfectivasTrabajador = horasImpresion * 0.1;
-    const costoTotalTrabajador =
+    let horasEfectivasTrabajador = horasImpresion * 0.1;
+    horasEfectivasTrabajador = Math.round(horasEfectivasTrabajador);
+    let costoTotalTrabajador =
         costoPorHoraTrabajador * horasEfectivasTrabajador;
+    costoTotalTrabajador = Math.round(costoTotalTrabajador);
 
     console.log(
         "Horas efectivas del trabajador para este trabajo:",
@@ -137,30 +141,57 @@ function calcularCostos() {
         document.getElementById("cantidad_usada").value
     );
 
-    const costoPorUnidadMaterial = parseFloat(material.costo_por_unidad);
-    const costoMateriales =
+    let costoPorUnidadMaterial = parseFloat(material.costo_por_unidad);
+    costoPorUnidadMaterial = Math.round(costoPorUnidadMaterial);
+    let costoMateriales =
         (cantidadMaterialUsada + cantidadDesperdicio) * costoPorUnidadMaterial;
+    costoMateriales = Math.round(costoMateriales);
 
     console.log("Costo de Materiales:", costoMateriales);
 
-    const costoTotal =
+    let costoTotal =
         costoTotalUsoMaquina + costoTotalTrabajador + costoMateriales;
+    costoTotal = Math.round(costoTotal);
 
     const margenBeneficio = 0.1;
-    const costoSugeridoUSD = costoTotal * (1 + margenBeneficio);
+    let costoSugeridoUSD = costoTotal * (1 + margenBeneficio);
+    costoSugeridoUSD = Math.round(costoSugeridoUSD);
 
     // Convertir el costo sugerido a pesos argentinos
-    const costoSugeridoARS = costoSugeridoUSD * valor_dolar;
+    let costoSugeridoARS = costoSugeridoUSD * valor_dolar;
+    costoSugeridoARS = Math.round(costoSugeridoARS);
 
     console.log("Costo Total del Producto (USD):", costoTotal);
     console.log("Costo Sugerido del Producto (USD):", costoSugeridoUSD);
     console.log("Costo Sugerido del Producto (ARS):", costoSugeridoARS);
 
+    // Cálculo adicional: factor ponderado
+    const factor = 0.5; // Ajustar el factor según sea necesario
+    let costoTotalPonderado =
+        factor * costoPorHoraTrabajador * horasEfectivasTrabajador +
+        (1 - factor) * costoPorHoraMaquina * horasImpresion;
+    costoTotalPonderado = Math.round(costoTotalPonderado);
+
+    console.log("Costo Total Ponderado:", costoTotalPonderado);
+
+    // División del costo total si la cantidad de unidades es mayor a 1
+    const cantidadUnidades = parseInt(
+        document.getElementById("cantidad_unidades").value,
+        10
+    );
+
+    if (cantidadUnidades > 1) {
+        const costoPorUnidad = costoSugeridoARS / cantidadUnidades;
+        console.log(
+            `Costo por Unidad (${cantidadUnidades} unidades): $${costoPorUnidad.toFixed(
+                2
+            )} ARS`
+        );
+    }
+
     document.getElementById(
         "costoSugerido"
-    ).textContent = `Costo Sugerido del Producto: $${costoSugeridoARS.toFixed(
-        2
-    )} ARS`;
+    ).textContent = `Costo Sugerido del Producto: $${costoSugeridoARS} ARS`;
 }
 
 // Función principal para iniciar el proceso de cálculo de costos
