@@ -1,5 +1,17 @@
 vagrant rsync para sincronizar la carpeta, esto es por Vite y la configuracion de Homestead.yml
 
+# Tomar la cotizacion del dolar todos los dias
+
+-   -   -   -   -   /usr/bin/php /path/to/your/project/artisan schedule:run >> /dev/null 2>&1
+
+# Comando para probar manualmente
+
+php artisan dolar:obtener
+
+# Cotizacion tomada de
+
+https://dolarapi.com/v1/dolares/blue
+
 # Para generar los nuevos vite
 
 Esto hace que genere los archivos minificados de all.js
@@ -67,3 +79,74 @@ TRABAJANDO - **Relacionar `impresiones` con `materiales`:** A través de la tabl
 ### 9. **Optimización**
 
 -   **Índices en columnas clave:** Asegúrate de que las columnas que participarán en las consultas y cálculos frecuentes tengan índices para mejorar el rendimiento de las consultas.
+
+### Cálculo de Costo en Función del Tiempo de la Máquina y el Tiempo del Operador
+
+1. **Costo del Tiempo de Máquina**:
+
+    - **Fórmula**:
+      \[
+      \text{Costo de Máquina} = (\text{Costo del Material} + \text{Costo de Energía} + \text{Costo de Desgaste de la Máquina}) \times \text{Horas de Impresión}
+      \]
+    - Este costo se calcula en función del tiempo total que la máquina está funcionando.
+
+2. **Costo de Horas Hombre**:
+    - **Fórmula**:
+      \[
+      \text{Costo de Horas Hombre} = \text{Horas Hombre Efectivas} \times \text{Costo por Hora Hombre}
+      \]
+    - Aquí solo se cuenta el tiempo efectivo que el operador está trabajando en el proyecto.
+
+### Ejemplo:
+
+Supongamos que:
+
+-   La impresora trabaja 24 horas para una impresión, pero el operador solo necesita 2 horas en total para preparar y finalizar el trabajo.
+-   El operador cuesta $20 por hora.
+-   El resto de los costos (material, energía, desgaste) ya se han calculado previamente, y para este ejemplo, suman $15 por hora de uso de la impresora.
+
+1. **Costo de Máquina**:
+   \[
+   15 \, \text{USD/h} \times 24 \, \text{h} = 360 \, \text{USD}
+   \]
+
+2. **Costo de Horas Hombre**:
+   \[
+   2 \, \text{h} \times 20 \, \text{USD/h} = 40 \, \text{USD}
+   \]
+
+3. **Costo Total**:
+   \[
+   \text{Costo Total} = \text{Costo de Máquina} + \text{Costo de Horas Hombre}
+   \]
+   \[
+   360 \, \text{USD} + 40 \, \text{USD} = 400 \, \text{USD}
+   \]
+
+4. **Costo Total con Margen de Ganancia** (si decides aplicar un margen del 30%):
+   \[
+   400 \, \text{USD} \times 1.3 = 520 \, \text{USD}
+   \]
+
+### Relación entre Tiempo de Máquina y Horas Hombre
+
+Una forma de visualizar esto es mediante un **factor de eficiencia**:
+
+-   **Factor de Eficiencia**: Relación entre las horas hombre y las horas de máquina.
+-   **Fórmula**:
+    \[
+    \text{Factor de Eficiencia} = \frac{\text{Horas Hombre}}{\text{Horas de Impresión}}
+    \]
+    -   En el ejemplo:
+        \[
+        \text{Factor de Eficiencia} = \frac{2}{24} = 0.0833
+        \]
+    -   Esto significa que por cada hora de impresión, solo 8.33% del tiempo es tiempo humano activo.
+
+Puedes usar este factor de eficiencia para ajustar el cálculo si, por ejemplo, decides que el costo de las horas hombre debe tener un peso específico en el costo total.
+
+### Resumen:
+
+-   **Costo del Tiempo de Máquina**: Se basa en el tiempo de uso total de la impresora.
+-   **Costo de Horas Hombre**: Se basa en el tiempo real que el operador está trabajando.
+-   **Relación**: El tiempo de máquina generalmente será mucho mayor que el tiempo humano, por lo que la mayoría del costo vendrá del uso de la impresora. Sin embargo, es importante no subestimar el costo de las horas hombre, ya que pueden incluir tareas críticas como la configuración y el acabado, que impactan directamente en la calidad del producto final.

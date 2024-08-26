@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'dolar' => [
+    'api_url' => env('DOLAR_API_URL'),
+    'api_key' => env('DOLAR_API_KEY'),
+],
+
 ];

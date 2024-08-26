@@ -17,19 +17,26 @@
         <p>{{ $maquina->vida_util_anios }}</p>
     </div>
     <div class="mb-3">
-        <strong>Costo:</strong>
+        <strong>Costo en UDS:</strong>
         <p>{{ $maquina->costo }}</p>
     </div>
+
+    <div class="mb-3">
+        <strong>Consumo de Energia por hora en watts:</strong>
+        <p>{{ $maquina->wats_consumidas_por_hora }}</p>
+    </div>
+    
     <div class="mb-3">
         <strong>Intervalo de Servicio (Horas):</strong>
         <p>{{ $maquina->intervalo_servicio_horas }}</p>
     </div>
     <div class="mb-3">
-        <strong>Costo de Servicio:</strong>
+        <strong>Costo de Servicio en UDS:</strong>
         <p>{{ $maquina->costo_servicio }}</p>
     </div>
 
     <a href="{{ route('maquinas.index') }}" class="btn btn-secondary">Volver</a>
 </div>
+<p>*Intervalo de Servicio, cantidad de horas que tiene que pasar para realizar un mantenimiento.</p>
 
 @endsection

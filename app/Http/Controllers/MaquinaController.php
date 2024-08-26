@@ -36,6 +36,7 @@ class MaquinaController extends Controller
             'intervalo_servicio_horas' => 'required|integer',
             'costo_servicio' => 'required|numeric',
             'costo_mantenimiento_por_hora' => 'required|numeric',
+            'wats_consumidas_por_hora' => 'required|numeric',
             'horas_utilizadas' => 'nullable|integer', // Hacerlo opcional
         ]);
 
@@ -64,7 +65,8 @@ class MaquinaController extends Controller
             'costo' => 'required|numeric',
             'intervalo_servicio_horas' => 'required|integer',
             'costo_servicio' => 'required|numeric',
-            'costo_mantenimiento_por_hora' => 'required|numeric'
+            'costo_mantenimiento_por_hora' => 'required|numeric',
+            'wats_consumidas_por_hora' => 'required|numeric'
         ]);
 
         $maquina->update($request->all());

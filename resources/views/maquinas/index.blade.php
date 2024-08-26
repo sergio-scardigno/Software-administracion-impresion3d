@@ -67,4 +67,9 @@
     
 </div>
 
+<p>*Intervalo de Servicio, cantidad de horas que tiene que pasar para realizar un mantenimiento.</p>
+
+
 @endsection
+
+

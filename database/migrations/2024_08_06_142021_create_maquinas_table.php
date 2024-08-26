@@ -24,7 +24,7 @@ return new class extends Migration
                 $table->decimal('costo_servicio', 10, 2);
 
                 // Nuevas columnas
-                $table->decimal('costo_energia_por_hora', 10, 2);
+                $table->decimal('wats_consumidas_por_hora', 10, 2);
                 $table->decimal('costo_mantenimiento_por_hora', 10, 2);
                 $table->integer('horas_utilizadas')->nullable();
                 $table->timestamps();

@@ -19,7 +19,7 @@ class Maquina extends Model
         'intervalo_servicio_horas', 
         'costo_mantenimiento_por_hora',
         'costo_servicio', 
-        'costo_energia_por_hora',
+        'wats_consumidas_por_hora',
         'horas_utilizadas'
     ];
 

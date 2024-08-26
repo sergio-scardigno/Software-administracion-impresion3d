@@ -35,8 +35,13 @@
         </div>
 
         <div class="mb-3">
-            <label for="costo" class="form-label">Costo:</label>
+            <label for="costo" class="form-label">Costo en UDS:</label>
             <input type="number" step="0.01" class="form-control" id="costo" name="costo" value="{{ old('costo', $maquina->costo) }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="wats_consumidas_por_hora" class="form-label">Consumo de Energia por hora en watts:</label>
+            <input type="number" step="0.01" class="form-control" id="wats_consumidas_por_hora" name="wats_consumidas_por_hora" value="{{ old('wats_consumidas_por_hora'), $maquina->wats_consumidas_por_hora }}">
         </div>
 
         <div class="mb-3">
@@ -45,12 +50,16 @@
         </div>
 
         <div class="mb-3">
-            <label for="costo_servicio" class="form-label">Costo de Servicio:</label>
+            <label for="costo_servicio" class="form-label">Costo de Servicio en UDS:</label>
             <input type="number" step="0.01" class="form-control" id="costo_servicio" name="costo_servicio" value="{{ old('costo_servicio', $maquina->costo_servicio) }}">
         </div>
 
         <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>
 </div>
+
+
+<p>*Intervalo de Servicio, cantidad de horas que tiene que pasar para realizar un mantenimiento.</p>
+
 
 @endsection
