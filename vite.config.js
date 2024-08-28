@@ -9,6 +9,8 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/js/all.js",
                 "resources/js/costos.js",
+                "resources/js/conversion-precios-ARS-USD.js",
+                "resources/js/consulta-precios.js",
             ],
             refresh: true,
         }),

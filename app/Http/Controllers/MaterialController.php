@@ -4,18 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Material;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+
 
 class MaterialController extends Controller
 {
     public function index()
     {
         $materiales = Material::all();
-        return view('materiales.index', compact('materiales'));
+        $precios = $this->obtenerPrecios();
+        
+        
+        return view('materiales.index', compact('materiales', 'precios'));
+
+
     }
 
     public function create()
     {
-        return view('materiales.create');
+        $precios = $this->obtenerPrecios();
+
+        return view('materiales.create', compact('precios'));
     }
 
     public function store(Request $request)
@@ -83,6 +94,30 @@ class MaterialController extends Controller
             ]);
         } else {
             return response()->json(['error' => 'Máquina no encontrada'], 404);
+        }
+    }
+
+    public function obtenerPrecios()
+    {
+        // URL de la API
+        $url = 'https://insumos-3d-api.vercel.app/precios?presentacion=1KG';
+    
+        // Realizar la solicitud GET a la API y almacenar la respuesta en una variable
+        $response = Http::get($url);
+    
+        // Depurar la respuesta
+        if ($response->successful()) {
+            // Mostrar la respuesta en un log para verificar la estructura
+            Log::info($response->json());
+            
+            // Retornar el JSON de la respuesta
+            return $response->json();
+        } else {
+            // Log de error en caso de fallo
+            Log::error('Error al obtener los precios: ' . $response->status());
+            
+            // Manejar el error y retornar null
+            return null;
         }
     }
 }

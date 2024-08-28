@@ -1,4 +1,6 @@
 <?php
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request; 
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaquinaController;
@@ -9,7 +11,7 @@ use App\Http\Controllers\TrabajadorController;
 use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\CotizacionController;
-use App\Livewire\FormularioImpresion;
+
 
 Route::resource('maquinas', MaquinaController::class);
 Route::resource('gastos_fijos', GastoFijoController::class);
@@ -28,9 +30,13 @@ Route::get('/materiales/{id}/datos', [MaterialController::class, 'obtenerDatos']
 
 Route::get('/cotizacion', [CotizacionController::class, 'obtenerCotizacion']);
 
-// Ruta para el componente Livewire
-// Route::get('/posts/create', FormularioImpresion::class)->name('impresion.create');
+Route::get('/proxy/precios', function (Request $request) {
+    $response = Http::get('https://insumos-3d-api.vercel.app/precios?', [
+        'search' => $request->query('search')
+    ]);
 
+    return $response->body();
+});
 
 Route::get('/', function () {
     return view('welcome');

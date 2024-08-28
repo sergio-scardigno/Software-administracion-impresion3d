@@ -93,36 +93,39 @@ function obtenerDatos(url, tipo) {
 function calcularCostos() {
     const { trabajador, maquina, material, valor_dolar } = datosObtenidos;
 
-    // Cálculo del Costo por Hora de la Máquina (sin redondeo)
+    // Cálculo del Costo por Hora de la Máquina (redondeado a 2 decimales)
     const costoTotalMaquina = parseFloat(maquina.costo);
     const vidaUtilAnios = parseFloat(maquina.vida_util_anios);
     const horasUtiles = vidaUtilAnios * 365 * 24;
     const costoMantenimiento = parseFloat(maquina.costo_mantenimiento || 0);
     const costoPorHoraMaquina =
         (costoTotalMaquina + costoMantenimiento) / horasUtiles;
+    const costoPorHoraMaquinaRedondeado = costoPorHoraMaquina.toFixed(2);
 
-    console.log("Costo por Hora de la Máquina:", costoPorHoraMaquina);
+    console.log("Costo por Hora de la Máquina:", costoPorHoraMaquinaRedondeado);
 
     const horasImpresion = parseFloat(
         document.getElementById("horas_impresion").value
     );
 
-    // Calculo del costo total de uso de la máquina (sin redondeo)
+    // Calculo del costo total de uso de la máquina (redondeado a 2 decimales)
     const costoTotalUsoMaquina = costoPorHoraMaquina * horasImpresion;
+    const costoTotalUsoMaquinaRedondeado = costoTotalUsoMaquina.toFixed(2);
+
     console.log(
         "Costo Total Uso de la Máquina para este trabajo:",
-        costoTotalUsoMaquina
+        costoTotalUsoMaquinaRedondeado
     );
 
     let costoPorHoraTrabajador = parseFloat(trabajador.costo_por_hora);
-    costoPorHoraTrabajador = Math.round(costoPorHoraTrabajador);
+    costoPorHoraTrabajador = costoPorHoraTrabajador.toFixed(2);
 
     // Supongamos que el trabajador efectivamente trabaja un 10% del tiempo total de impresión
     let horasEfectivasTrabajador = horasImpresion * 0.1;
-    horasEfectivasTrabajador = Math.round(horasEfectivasTrabajador);
+    horasEfectivasTrabajador = horasEfectivasTrabajador.toFixed(2);
     let costoTotalTrabajador =
         costoPorHoraTrabajador * horasEfectivasTrabajador;
-    costoTotalTrabajador = Math.round(costoTotalTrabajador);
+    costoTotalTrabajador = costoTotalTrabajador.toFixed(2);
 
     console.log(
         "Horas efectivas del trabajador para este trabajo:",
@@ -142,24 +145,26 @@ function calcularCostos() {
     );
 
     let costoPorUnidadMaterial = parseFloat(material.costo_por_unidad);
-    costoPorUnidadMaterial = Math.round(costoPorUnidadMaterial);
+    costoPorUnidadMaterial = costoPorUnidadMaterial.toFixed(2);
     let costoMateriales =
         (cantidadMaterialUsada + cantidadDesperdicio) * costoPorUnidadMaterial;
-    costoMateriales = Math.round(costoMateriales);
+    costoMateriales = costoMateriales.toFixed(2);
 
     console.log("Costo de Materiales:", costoMateriales);
 
     let costoTotal =
-        costoTotalUsoMaquina + costoTotalTrabajador + costoMateriales;
-    costoTotal = Math.round(costoTotal);
+        parseFloat(costoTotalUsoMaquinaRedondeado) +
+        parseFloat(costoTotalTrabajador) +
+        parseFloat(costoMateriales);
+    costoTotal = costoTotal.toFixed(2);
 
     const margenBeneficio = 0.1;
     let costoSugeridoUSD = costoTotal * (1 + margenBeneficio);
-    costoSugeridoUSD = Math.round(costoSugeridoUSD);
+    costoSugeridoUSD = costoSugeridoUSD.toFixed(2);
 
     // Convertir el costo sugerido a pesos argentinos
     let costoSugeridoARS = costoSugeridoUSD * valor_dolar;
-    costoSugeridoARS = Math.round(costoSugeridoARS);
+    costoSugeridoARS = costoSugeridoARS.toFixed(2);
 
     console.log("Costo Total del Producto (USD):", costoTotal);
     console.log("Costo Sugerido del Producto (USD):", costoSugeridoUSD);
@@ -170,7 +175,7 @@ function calcularCostos() {
     let costoTotalPonderado =
         factor * costoPorHoraTrabajador * horasEfectivasTrabajador +
         (1 - factor) * costoPorHoraMaquina * horasImpresion;
-    costoTotalPonderado = Math.round(costoTotalPonderado);
+    costoTotalPonderado = costoTotalPonderado.toFixed(2);
 
     console.log("Costo Total Ponderado:", costoTotalPonderado);
 
