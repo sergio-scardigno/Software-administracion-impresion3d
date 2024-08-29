@@ -23,3 +23,11 @@ function calcularHoras() {
         document.getElementById("horas_impresion").value
     );
 }
+
+
+$(document).ready(function() {
+    $('.select2').select2({
+        placeholder: "Selecciona una opción",
+        allowClear: true
+    });
+});

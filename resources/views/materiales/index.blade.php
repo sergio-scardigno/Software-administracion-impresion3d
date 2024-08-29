@@ -49,8 +49,11 @@
             {{-- Columna para mostrar los 10 mejores precios --}}
             <div class="col-lg-4 col-md-12">
                 <h3>Top 10 Mejores Precios</h3>
-    
-                @if ($precios)
+                
+                    
+                    @dump($precios)
+                
+                {{-- @if ($precios)
                     @php
                         // Ordenar los precios de menor a mayor
                         $mejoresPrecios = collect($precios)->sortBy('precio')->take(10);
@@ -65,7 +68,7 @@
                     </ul>
                 @else
                     <p>No se pudieron obtener los precios.</p>
-                @endif
+                @endif --}}
             </div>
         </div>
     </div>
