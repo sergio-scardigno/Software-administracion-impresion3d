@@ -23,8 +23,11 @@ class Maquina extends Model
         'horas_utilizadas'
     ];
 
+  
     public function impresiones()
     {
-        return $this->hasMany(Impresion::class, 'id_maquina');
+        // Relación muchos a muchos con Impresion a través de la tabla intermedia ImpresionMaquinaTrabajador
+        return $this->belongsToMany(Impresion::class, 'impresion_maquina_trabajador', 'id_maquina', 'id_impresion')
+                    ->withTimestamps();
     }
 }

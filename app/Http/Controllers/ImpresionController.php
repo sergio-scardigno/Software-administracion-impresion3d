@@ -32,8 +32,6 @@ class ImpresionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_maquina' => 'required|exists:maquinas,id_maquina',
-            'id_trabajador' => 'required|exists:trabajadores,id_trabajador',
             'fecha_inicio' => 'required|date',
             'horas_impresion' => 'required|integer',
             'dimension_x' => 'required|numeric',
@@ -42,6 +40,11 @@ class ImpresionController extends Controller
             'desperdicio' => 'required|numeric',
             'cantidad_unidades' => 'required|numeric',
             'venta' => 'required|numeric',
+            'precio_venta' => 'nullable|numeric',
+            'maquinas' => 'required|array',
+            'maquinas.*' => 'exists:maquinas,id_maquina',
+            'trabajadores' => 'required|array',
+            'trabajadores.*' => 'exists:trabajadores,id_trabajador',
             'materiales' => 'required|array',
             'materiales.*.id_material' => 'required|exists:materiales,id_material',
             'materiales.*.cantidad_usada' => 'required|numeric',
@@ -49,6 +52,10 @@ class ImpresionController extends Controller
         ]);
 
         $impresion = Impresion::create($request->all());
+
+        // Asociar máquinas y trabajadores a la impresión
+        $impresion->maquinas()->attach($request->maquinas);
+        $impresion->trabajadores()->attach($request->trabajadores);
 
         // Asociar materiales con la impresión
         foreach ($request->materiales as $materialData) {
@@ -63,7 +70,7 @@ class ImpresionController extends Controller
 
     public function show($id)
     {
-        $impresion = Impresion::with('materiales')->find($id);
+        $impresion = Impresion::with('materiales', 'maquinas', 'trabajadores')->findOrFail($id);
 
         return view('impresiones.show', compact('impresion'));
     }
@@ -73,7 +80,7 @@ class ImpresionController extends Controller
         $trabajadores = Trabajador::all();
         $maquinas = Maquina::all();
         $materiales = Material::all(); // Obtener todos los materiales
-        $impresion->load('materiales'); // Cargar los materiales actuales asociados con la impresión
+        $impresion->load('materiales', 'maquinas', 'trabajadores'); // Cargar las relaciones actuales
 
         return view('impresiones.edit', compact('impresion', 'trabajadores', 'maquinas', 'materiales'));
     }
@@ -81,8 +88,6 @@ class ImpresionController extends Controller
     public function update(Request $request, Impresion $impresion)
     {
         $request->validate([
-            'id_maquina' => 'required|exists:maquinas,id_maquina',
-            'id_trabajador' => 'required|exists:trabajadores,id_trabajador',
             'fecha_inicio' => 'required|date',
             'horas_impresion' => 'required|integer',
             'dimension_x' => 'required|numeric',
@@ -91,6 +96,11 @@ class ImpresionController extends Controller
             'desperdicio' => 'required|numeric',
             'cantidad_unidades' => 'required|numeric',
             'venta' => 'required|numeric',
+            'precio_venta' => 'nullable|numeric',
+            'maquinas' => 'required|array',
+            'maquinas.*' => 'exists:maquinas,id_maquina',
+            'trabajadores' => 'required|array',
+            'trabajadores.*' => 'exists:trabajadores,id_trabajador',
             'materiales' => 'required|array',
             'materiales.*.id_material' => 'required|exists:materiales,id_material',
             'materiales.*.cantidad_usada' => 'required|numeric',
@@ -98,6 +108,10 @@ class ImpresionController extends Controller
         ]);
 
         $impresion->update($request->all());
+
+        // Sincronizar máquinas y trabajadores asociados con la impresión
+        $impresion->maquinas()->sync($request->maquinas);
+        $impresion->trabajadores()->sync($request->trabajadores);
 
         // Sincronizar materiales asociados con la impresión
         $syncData = [];

@@ -24,6 +24,8 @@ class Trabajador extends Model
 
     public function impresiones()
     {
-        return $this->hasMany(Impresion::class, 'id_trabajador');
+        // Relación muchos a muchos con Impresion a través de la tabla intermedia ImpresionMaquinaTrabajador
+        return $this->belongsToMany(Impresion::class, 'impresion_maquina_trabajador', 'id_trabajador', 'id_impresion')
+                    ->withTimestamps();
     }
 }

@@ -28,18 +28,23 @@ class Impresion extends Model
         'precio_venta'
     ];
 
-    public function maquina()
+    public function maquinas()
     {
-        return $this->belongsTo(Maquina::class, 'id_maquina');
+        // Relación muchos a muchos con Maquina a través de la tabla intermedia ImpresionMaquinaTrabajador
+        return $this->belongsToMany(Maquina::class, 'impresion_maquina_trabajador', 'id_impresion', 'id_maquina')
+                    ->withTimestamps();
     }
 
-    public function trabajador()
+    public function trabajadores()
     {
-        return $this->belongsTo(Trabajador::class, 'id_trabajador');
+        // Relación muchos a muchos con Trabajador a través de la tabla intermedia ImpresionMaquinaTrabajador
+        return $this->belongsToMany(Trabajador::class, 'impresion_maquina_trabajador', 'id_impresion', 'id_trabajador')
+                    ->withTimestamps();
     }
 
     public function materiales()
     {
+        // Relación muchos a muchos con Material a través de la tabla intermedia ImpresionMaterial
         return $this->belongsToMany(Material::class, 'impresion_material', 'id_impresion', 'id_material')
                     ->withPivot('cantidad_usada', 'costo')
                     ->withTimestamps();
