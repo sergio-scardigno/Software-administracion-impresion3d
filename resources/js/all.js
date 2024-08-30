@@ -24,22 +24,28 @@ function calcularHoras() {
     );
 }
 
-
 // Cambios con select2
 
-$(document).ready(function() {
-    $('.select2').select2({
+$(document).ready(function () {
+    $("#id_maquina").select2({
         placeholder: "Selecciona una opción",
-        allowClear: true
+        allowClear: true,
+    });
+});
+
+$(document).ready(function () {
+    $("#id_trabajador").select2({
+        placeholder: "Selecciona una opción",
+        allowClear: true,
     });
 });
 
 let materialCount = 1;
 
 function agregarMaterial() {
-    const container = document.getElementById('materiales-container');
-    const newMaterialGroup = document.createElement('div');
-    newMaterialGroup.classList.add('material-group');
+    const container = document.getElementById("materiales-container");
+    const newMaterialGroup = document.createElement("div");
+    newMaterialGroup.classList.add("material-group");
 
     newMaterialGroup.innerHTML = `
         <div class="mb-3">
@@ -64,16 +70,9 @@ function agregarMaterial() {
     `;
 
     container.appendChild(newMaterialGroup);
-    $('.select2').select2({
+    $(".select2").select2({
         placeholder: "Selecciona una opción",
-        allowClear: true
+        allowClear: true,
     });
     materialCount++;
-}
-
-function calcularCosto() {
-    // Lógica para calcular el costo sugerido
-    let costoSugerido = 0;
-    // Calcular costo basado en los materiales y otros inputs
-    document.getElementById('costoSugerido').innerText = `Costo Sugerido del Producto: $${costoSugerido.toFixed(2)}`;
 }
