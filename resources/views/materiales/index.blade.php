@@ -6,9 +6,9 @@
     <a href="{{ route('materiales.create') }}" class="btn btn-primary mb-3">Agregar Material</a>
 
     @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
+    <div class="alert alert-success">
+        <p>{{ $message }}</p>
+    </div>
     @endif
     <div class="container">
         <div class="row">
@@ -32,9 +32,12 @@
                             <td>{{ $material->unidad_de_medida }}</td>
                             <td>{{ $material->cantidad_de_material }}</td>
                             <td>
-                                <a href="{{ route('materiales.show', $material->id_material) }}" class="btn btn-info btn-sm">Ver</a>
-                                <a href="{{ route('materiales.edit', $material->id_material) }}" class="btn btn-warning btn-sm">Editar</a>
-                                <form action="{{ route('materiales.destroy', $material->id_material) }}" method="POST" style="display:inline-block;">
+                                <a href="{{ route('materiales.show', $material->id_material) }}"
+                                    class="btn btn-info btn-sm">Ver</a>
+                                <a href="{{ route('materiales.edit', $material->id_material) }}"
+                                    class="btn btn-warning btn-sm">Editar</a>
+                                <form action="{{ route('materiales.destroy', $material->id_material) }}" method="POST"
+                                    style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
@@ -45,14 +48,14 @@
                     </tbody>
                 </table>
             </div>
-    
+
             {{-- Columna para mostrar los 10 mejores precios --}}
             <div class="col-lg-4 col-md-12">
                 <h3>Top 10 Mejores Precios</h3>
-                
-                    
-                    @dump($precios)
-                
+
+
+                @dump($precios)
+
                 {{-- @if ($precios)
                     @php
                         // Ordenar los precios de menor a mayor
@@ -62,17 +65,18 @@
                     <ul class="list-group">
                         @foreach ($mejoresPrecios as $precio)
                             <li class="list-group-item">
-                                <strong>{{ $precio['negocio'] }}:</strong> {{ $precio['precio'] }}<br>{{ $precio['title'] }}
-                            </li>
-                        @endforeach
-                    </ul>
+                                <strong>{{ $precio['negocio'] }}:</strong>
+                {{ $precio['precio'] }}<br>{{ $precio['title'] }}
+                </li>
+                @endforeach
+                </ul>
                 @else
-                    <p>No se pudieron obtener los precios.</p>
+                <p>No se pudieron obtener los precios.</p>
                 @endif --}}
             </div>
         </div>
     </div>
-    
+
 
 </div>
 @endsection

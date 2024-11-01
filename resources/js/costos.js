@@ -1,227 +1,523 @@
-// function calcularCosto() {
-//     const trabajadorId = document.getElementById("id_trabajador").value;
-//     const maquinaId = document.getElementById("id_maquina").value;
-//     const materialId = document.getElementById("material").value;
-//     const desperdicio = document.getElementById("desperdicio").value;
+// Este script saca bien las cuentas
+// async function calcularCostos(datosObtenidos) {
+//     const { trabajadores, maquinas, materiales, valor_dolar } = datosObtenidos;
 
-//     if (!trabajadorId || !maquinaId || !materialId || !desperdicio) {
-//         alert("Por favor selecciona un trabajador, una máquina y un material.");
+//     let costoTotalMaquina = 0;
+//     let costoTotalTrabajador = 0;
+//     let costoMateriales = 0;
+
+//     const horasImpresion = parseFloat(
+//         document.getElementById("horas_impresion").value
+//     );
+//     if (isNaN(horasImpresion) || horasImpresion <= 0) {
+//         console.error("Horas de impresión no válidas.");
 //         return;
 //     }
 
-//     console.log("ID del trabajador seleccionado:", trabajadorId);
-//     console.log("ID de la máquina seleccionada:", maquinaId);
-//     console.log("ID del material seleccionado:", materialId);
-//     console.log("Cantidad de Desperdicio en kilos:", desperdicio);
+//     console.log("Inicio del cálculo de costos:");
+//     console.log(`Horas de impresión: ${horasImpresion}`);
 
-//     obtenerDatos(`/trabajadores/${trabajadorId}/datos`, "trabajador");
-//     obtenerDatos(`/maquinas/${maquinaId}/datos`, "maquina");
-//     obtenerDatos(`/materiales/${materialId}/datos`, "material");
-// }
+//     // Calcular el costo total de uso de máquinas
+//     for (const maquina of maquinas) {
+//         const costoTotalMaquinaUnidad = parseFloat(maquina.costo);
+//         const vidaUtilAnios = parseFloat(maquina.vida_util_anios);
+//         const horasUtiles = vidaUtilAnios * 365 * 24;
+//         const costoMantenimiento = parseFloat(maquina.costo_mantenimiento || 0);
+//         const costoPorHoraMaquina =
+//             (costoTotalMaquinaUnidad + costoMantenimiento) / horasUtiles;
+//         const costoTotalUsoMaquina = costoPorHoraMaquina * horasImpresion;
 
-// function obtenerDatos(url, tipo) {
-//     fetch(url)
-//         .then((response) => response.json())
-//         .then((data) => {
-//             console.log(`Datos del ${tipo}:`, data);
-//             // Lógica adicional para usar los datos obtenidos
-//         })
-//         .catch((error) =>
-//             console.error(`Error al obtener datos del ${tipo}:`, error)
+//         costoTotalMaquina += parseFloat(costoTotalUsoMaquina);
+//     }
+
+//     console.log(
+//         `Costo total antes de distribución de máquinas: ${costoTotalMaquina}`
+//     );
+
+//     if (maquinas.length > 1) {
+//         costoTotalMaquina /= maquinas.length;
+//     }
+
+//     console.log(
+//         `Costo total de las máquinas después de distribución: ${costoTotalMaquina}`
+//     );
+
+//     // Calcular costo total de trabajadores
+//     for (const trabajador of trabajadores) {
+//         const costoPorHoraTrabajador = parseFloat(trabajador.costo_por_hora);
+
+//         if (isNaN(costoPorHoraTrabajador) || costoPorHoraTrabajador <= 0) {
+//             console.error("Costo por hora no válido para un trabajador.");
+//             continue;
+//         }
+
+//         const horasEfectivasTrabajador = horasImpresion; // Ajustar según sea necesario
+//         const costoTotalTrabajadorItem =
+//             costoPorHoraTrabajador * horasEfectivasTrabajador;
+
+//         costoTotalTrabajador += parseFloat(costoTotalTrabajadorItem);
+//     }
+
+//     console.log(
+//         `Costo total acumulado de trabajadores: ${costoTotalTrabajador}`
+//     );
+
+//     if (trabajadores.length > 1) {
+//         costoTotalTrabajador /= trabajadores.length;
+//     }
+
+//     console.log(
+//         `Costo total de los trabajadores después de distribución: ${costoTotalTrabajador}`
+//     );
+
+//     // Calcular costo total de materiales
+//     for (const [index, material] of materiales.entries()) {
+//         const cantidadMaterialUsadaElement = document.querySelector(
+//             `[name="materiales[${index}][cantidad_usada]"]`
 //         );
+//         const desperdicioElement = document.getElementById("desperdicio");
+
+//         if (!cantidadMaterialUsadaElement || !desperdicioElement) {
+//             console.error(
+//                 `No se encontró el elemento para material en índice ${index}`
+//             );
+//             continue;
+//         }
+
+//         const cantidadMaterialUsada = parseFloat(
+//             cantidadMaterialUsadaElement.value
+//         );
+//         const desperdicio = parseFloat(desperdicioElement.value);
+
+//         if (isNaN(cantidadMaterialUsada) || isNaN(desperdicio)) {
+//             console.error(
+//                 `Cantidad de material usada o desperdicio no es válida para material en índice ${index}`
+//             );
+//             continue;
+//         }
+
+//         const cantidadTotalUsada = cantidadMaterialUsada + desperdicio;
+
+//         console.log(`Costo total de cantidadTotalUsada: ${cantidadTotalUsada}`);
+
+//         //const CantidadTotalUsadaEnGramos = cantidadTotalUsada / 1000;
+
+//         const costoPorUnidadMaterial = parseFloat(material.costo_por_unidad);
+
+//         // Sacamos el costo por gramo
+
+//         const costoPorGramo = parseFloat(material.costo_por_gramo);
+
+//         console.log(`Costo total de costoPorGramo: ${costoPorGramo}`);
+
+//         if (isNaN(costoPorUnidadMaterial)) {
+//             console.error(
+//                 `Costo por unidad del material no es válido para material en índice ${index}`
+//             );
+//             continue;
+//         }
+
+//         // Definir la cantidad de material en gramos o kilos (puede ajustarse según tus necesidades)
+//         //const cantidadMaterial = 750; // 1 KG = 1000 GR (Ajustar según el valor que quieras usar)
+//         const costoMaterialItem = cantidadTotalUsada * costoPorGramo;
+
+//         //console.log(`Costo total de costoMaterialItem: ${costoMaterialItem}`);
+
+//         costoMateriales += parseFloat(costoMaterialItem);
+//     }
+
+//     console.log(`Costo total de materiales: ${costoMateriales}`);
+
+//     // Calcular el costo total
+//     let costoTotal = costoTotalMaquina + costoTotalTrabajador + costoMateriales;
+//     costoTotal = parseFloat(costoTotal);
+
+//     console.log("Costo total del producto (sin margen):", costoTotal);
+
+//     // Aplicar margen de beneficio
+//     const margenBeneficio = 0.1;
+//     let costoSugeridoUSD = costoTotal * (1 + margenBeneficio);
+//     costoSugeridoUSD = parseFloat(costoSugeridoUSD);
+
+//     // Convertir a ARS
+//     let costoSugeridoARS = costoSugeridoUSD * valor_dolar;
+//     costoSugeridoARS = parseFloat(costoSugeridoARS);
+
+//     console.log("Costo Sugerido del Producto (USD):", costoSugeridoUSD);
+//     console.log("Costo Sugerido del Producto (ARS):", costoSugeridoARS);
+
+//     // Calcular costo total ponderado
+//     const factor = 0.5;
+//     let costoTotalPonderado =
+//         factor * costoTotalTrabajador + (1 - factor) * costoTotalMaquina;
+//     costoTotalPonderado = parseFloat(costoTotalPonderado);
+
+//     console.log("Costo Total Ponderado:", costoTotalPonderado);
+
+//     const cantidadUnidades = parseInt(
+//         document.getElementById("cantidad_unidades").value,
+//         10
+//     );
+//     if (!isNaN(cantidadUnidades) && cantidadUnidades > 1) {
+//         const costoPorUnidad = costoSugeridoARS / cantidadUnidades;
+//         console.log(
+//             `Costo por Unidad (${cantidadUnidades} unidades): $${costoPorUnidad.toFixed(
+//                 2
+//             )} ARS`
+//         );
+//     }
+
+//     document.getElementById(
+//         "costoSugerido"
+//     ).textContent = `Costo Sugerido del Producto: $${costoSugeridoARS} ARS`;
 // }
 
-// // Hacer la función global
-// window.calcularCosto = calcularCosto;
+// Este script tambien funciona
 
-// Objeto para almacenar los datos obtenidos
-const datosObtenidos = {
-    trabajador: null,
-    maquina: null,
-    material: null,
-    valor_dolar: null, // Agregar valor_dolar aquí
-};
+async function calcularCostos(datosObtenidos) {
+    const { trabajadores, maquinas, materiales, valor_dolar } = datosObtenidos;
 
-const urlPrecioDolar = `/cotizacion`;
-
-function obtenerPrecioDolar(url) {
-    return fetch(url)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Error en la respuesta de la red");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            if (data.valor_dolar) {
-                console.log(`El precio del dólar es: ${data.valor_dolar}`);
-                datosObtenidos.valor_dolar = data.valor_dolar; // Guardar el valor del dólar
-                return data.valor_dolar;
-            } else {
-                console.error(
-                    'La respuesta no contiene la clave "valor_dolar".'
-                );
-            }
-        })
-        .catch((error) =>
-            console.error("Error al obtener el precio del dólar:", error)
-        );
-}
-
-// Función para obtener datos de un endpoint y guardarlos en el objeto global
-function obtenerDatos(url, tipo) {
-    fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(`Datos del ${tipo}:`, data);
-            datosObtenidos[tipo] = data;
-            if (
-                datosObtenidos.trabajador &&
-                datosObtenidos.maquina &&
-                datosObtenidos.material &&
-                datosObtenidos.valor_dolar // Verificar que también se tenga el valor del dólar
-            ) {
-                calcularCostos();
-            }
-        })
-        .catch((error) =>
-            console.error(`Error al obtener datos del ${tipo}:`, error)
-        );
-}
-
-// Función para calcular costos después de obtener todos los datos necesarios
-function calcularCostos() {
-    const { trabajador, maquina, material, valor_dolar } = datosObtenidos;
-
-    // Cálculo del Costo por Hora de la Máquina (redondeado a 2 decimales)
-    const costoTotalMaquina = parseFloat(maquina.costo);
-    const vidaUtilAnios = parseFloat(maquina.vida_util_anios);
-    const horasUtiles = vidaUtilAnios * 365 * 24;
-    const costoMantenimiento = parseFloat(maquina.costo_mantenimiento || 0);
-    const costoPorHoraMaquina =
-        (costoTotalMaquina + costoMantenimiento) / horasUtiles;
-    const costoPorHoraMaquinaRedondeado = costoPorHoraMaquina.toFixed(2);
-
-    console.log("Costo por Hora de la Máquina:", costoPorHoraMaquinaRedondeado);
+    let costoTotalMaquinaUSD = 0;
+    let costoTotalTrabajadorUSD = 0;
+    let costoMaterialesUSD = 0;
 
     const horasImpresion = parseFloat(
         document.getElementById("horas_impresion").value
     );
+    if (isNaN(horasImpresion) || horasImpresion <= 0) {
+        console.error("Horas de impresión no válidas.");
+        return;
+    }
 
-    // Calculo del costo total de uso de la máquina (redondeado a 2 decimales)
-    const costoTotalUsoMaquina = costoPorHoraMaquina * horasImpresion;
-    const costoTotalUsoMaquinaRedondeado = costoTotalUsoMaquina.toFixed(2);
+    console.log("Inicio del cálculo de costos:");
+    console.log(`Horas de impresión: ${horasImpresion}`);
+
+    // Calcular el costo total de uso de máquinas
+    for (const maquina of maquinas) {
+        const costoTotalMaquinaUnidad = parseFloat(maquina.costo);
+        const vidaUtilAnios = parseFloat(maquina.vida_util_anios);
+        const horasUtiles = vidaUtilAnios * 365 * 24;
+        const costoMantenimiento = parseFloat(maquina.costo_mantenimiento || 0);
+        const costoPorHoraMaquina =
+            (costoTotalMaquinaUnidad + costoMantenimiento) / horasUtiles;
+        const costoTotalUsoMaquina = costoPorHoraMaquina * horasImpresion;
+
+        costoTotalMaquinaUSD += parseFloat(costoTotalUsoMaquina);
+    }
 
     console.log(
-        "Costo Total Uso de la Máquina para este trabajo:",
-        costoTotalUsoMaquinaRedondeado
+        `Costo total antes de distribución de máquinas: ${costoTotalMaquinaUSD}`
     );
 
-    let costoPorHoraTrabajador = parseFloat(trabajador.costo_por_hora);
-    costoPorHoraTrabajador = costoPorHoraTrabajador.toFixed(2);
-
-    // Supongamos que el trabajador efectivamente trabaja un 10% del tiempo total de impresión
-    let horasEfectivasTrabajador = horasImpresion * 0.1;
-    horasEfectivasTrabajador = horasEfectivasTrabajador.toFixed(2);
-    let costoTotalTrabajador =
-        costoPorHoraTrabajador * horasEfectivasTrabajador;
-    costoTotalTrabajador = costoTotalTrabajador.toFixed(2);
+    if (maquinas.length > 1) {
+        costoTotalMaquinaUSD /= maquinas.length;
+    }
 
     console.log(
-        "Horas efectivas del trabajador para este trabajo:",
-        horasEfectivasTrabajador
+        `Costo total de las máquinas después de distribución: ${costoTotalMaquinaUSD}`
     );
+
+    // Calcular costo total de trabajadores
+    for (const trabajador of trabajadores) {
+        const costoPorHoraTrabajador = parseFloat(trabajador.costo_por_hora);
+
+        if (isNaN(costoPorHoraTrabajador) || costoPorHoraTrabajador <= 0) {
+            console.error("Costo por hora no válido para un trabajador.");
+            continue;
+        }
+
+        const horasEfectivasTrabajador = horasImpresion;
+        const costoTotalTrabajadorItem =
+            costoPorHoraTrabajador * horasEfectivasTrabajador;
+
+        costoTotalTrabajadorUSD += parseFloat(costoTotalTrabajadorItem);
+    }
+
     console.log(
-        "Costo Total del Trabajador para este trabajo:",
-        costoTotalTrabajador
+        `Costo total acumulado de trabajadores: ${costoTotalTrabajadorUSD}`
     );
 
-    const cantidadDesperdicio = parseFloat(
-        document.getElementById("desperdicio").value
+    if (trabajadores.length > 1) {
+        costoTotalTrabajadorUSD /= trabajadores.length;
+    }
+
+    console.log(
+        `Costo total de los trabajadores después de distribución: ${costoTotalTrabajadorUSD}`
     );
 
-    const cantidadMaterialUsada = parseFloat(
-        document.getElementById("cantidad_usada").value
-    );
+    // Calcular costo total de materiales
+    for (const [index, material] of materiales.entries()) {
+        const cantidadMaterialUsadaElement = document.querySelector(
+            `[name="materiales[${index}][cantidad_usada]"]`
+        );
+        const desperdicioElement = document.getElementById("desperdicio");
 
-    let costoPorUnidadMaterial = parseFloat(material.costo_por_unidad);
-    costoPorUnidadMaterial = costoPorUnidadMaterial.toFixed(2);
-    let costoMateriales =
-        (cantidadMaterialUsada + cantidadDesperdicio) * costoPorUnidadMaterial;
-    costoMateriales = costoMateriales.toFixed(2);
+        if (!cantidadMaterialUsadaElement || !desperdicioElement) {
+            console.error(
+                `No se encontró el elemento para material en índice ${index}`
+            );
+            continue;
+        }
 
-    console.log("Costo de Materiales:", costoMateriales);
+        const cantidadMaterialUsada = parseFloat(
+            cantidadMaterialUsadaElement.value
+        );
+        const desperdicio = parseFloat(desperdicioElement.value);
 
-    let costoTotal =
-        parseFloat(costoTotalUsoMaquinaRedondeado) +
-        parseFloat(costoTotalTrabajador) +
-        parseFloat(costoMateriales);
-    costoTotal = costoTotal.toFixed(2);
+        if (isNaN(cantidadMaterialUsada) || isNaN(desperdicio)) {
+            console.error(
+                `Cantidad de material usada o desperdicio no es válida para material en índice ${index}`
+            );
+            continue;
+        }
 
+        const cantidadTotalUsada = cantidadMaterialUsada + desperdicio;
+
+        const costoPorGramo = parseFloat(material.costo_por_gramo);
+
+        if (isNaN(costoPorGramo)) {
+            console.error(
+                `Costo por gramo del material no es válido para material en índice ${index}`
+            );
+            continue;
+        }
+
+        const costoMaterialItem = cantidadTotalUsada * costoPorGramo;
+
+        costoMaterialesUSD += parseFloat(costoMaterialItem);
+
+        // Actualizar el campo del costo en el formulario
+        const costoField = document.getElementById(`material-costo-${index}`);
+        if (costoField) {
+            costoField.value = costoMaterialItem.toFixed(2);
+        }
+
+        console.log(`Peso total de materiales: ${cantidadTotalUsada}`);
+        console.log(`Precio de cada material: ${costoPorGramo}`);
+    }
+
+    console.log(`Costo total de materiales: ${costoMaterialesUSD}`);
+
+    // Calcular el costo total en USD
+    let costoTotalUSD =
+        costoTotalMaquinaUSD + costoTotalTrabajadorUSD + costoMaterialesUSD;
+    costoTotalUSD = parseFloat(costoTotalUSD);
+
+    console.log("Costo total del producto (sin margen):", costoTotalUSD);
+
+    // Aplicar margen de beneficio
     const margenBeneficio = 0.1;
-    let costoSugeridoUSD = costoTotal * (1 + margenBeneficio);
-    costoSugeridoUSD = costoSugeridoUSD.toFixed(2);
+    let costoSugeridoUSD = costoTotalUSD * (1 + margenBeneficio);
+    costoSugeridoUSD = parseFloat(costoSugeridoUSD);
 
-    // Convertir el costo sugerido a pesos argentinos
+    // Convertir a ARS
     let costoSugeridoARS = costoSugeridoUSD * valor_dolar;
-    costoSugeridoARS = costoSugeridoARS.toFixed(2);
+    costoSugeridoARS = parseFloat(costoSugeridoARS);
 
-    console.log("Costo Total del Producto (USD):", costoTotal);
     console.log("Costo Sugerido del Producto (USD):", costoSugeridoUSD);
     console.log("Costo Sugerido del Producto (ARS):", costoSugeridoARS);
 
-    // Cálculo adicional: factor ponderado
-    const factor = 0.5; // Ajustar el factor según sea necesario
-    let costoTotalPonderado =
-        factor * costoPorHoraTrabajador * horasEfectivasTrabajador +
-        (1 - factor) * costoPorHoraMaquina * horasImpresion;
-    costoTotalPonderado = costoTotalPonderado.toFixed(2);
+    console.log("Sacando costo total", valor_dolar);
 
-    console.log("Costo Total Ponderado:", costoTotalPonderado);
+    let constoTotalARG = costoTotalUSD * valor_dolar;
 
-    // División del costo total si la cantidad de unidades es mayor a 1
+    console.log("Sacando costo total", constoTotalARG);
+
+    // Mostrar el costo total y el costo sugerido en ARS
+    const totalCostDisplay = document.getElementById("total-cost-display");
+    if (totalCostDisplay) {
+        totalCostDisplay.textContent = `Costo Total: ${constoTotalARG.toFixed(
+            2
+        )} ARS`;
+    }
+
+    // Calcular costo total ponderado en USD y ARS
+    const factor = 0.5;
+    let costoTotalPonderadoUSD =
+        factor * costoTotalTrabajadorUSD + (1 - factor) * costoTotalMaquinaUSD;
+    costoTotalPonderadoUSD = parseFloat(costoTotalPonderadoUSD);
+
+    let costoTotalPonderadoARS = costoTotalPonderadoUSD * valor_dolar;
+    costoTotalPonderadoARS = parseFloat(costoTotalPonderadoARS);
+
+    console.log("Costo Total Ponderado (USD):", costoTotalPonderadoUSD);
+    console.log("Costo Total Ponderado (ARS):", costoTotalPonderadoARS);
+
     const cantidadUnidades = parseInt(
         document.getElementById("cantidad_unidades").value,
         10
     );
-
-    if (cantidadUnidades > 1) {
-        const costoPorUnidad = costoSugeridoARS / cantidadUnidades;
+    if (!isNaN(cantidadUnidades) && cantidadUnidades > 1) {
+        const costoPorUnidadUSD = costoSugeridoUSD / cantidadUnidades;
+        const costoPorUnidadARS = costoSugeridoARS / cantidadUnidades;
         console.log(
-            `Costo por Unidad (${cantidadUnidades} unidades): $${costoPorUnidad.toFixed(
+            `Costo por Unidad (${cantidadUnidades} unidades): $${costoPorUnidadUSD.toFixed(
                 2
-            )} ARS`
+            )} USD / $${costoPorUnidadARS.toFixed(2)} ARS`
         );
     }
 
     document.getElementById(
         "costoSugerido"
-    ).textContent = `Costo Sugerido del Producto: $${costoSugeridoARS} ARS`;
+    ).textContent = `Precio Sugerido del Producto: $${costoSugeridoARS.toFixed(
+        2
+    )} ARS / $${costoSugeridoUSD.toFixed(2)} USD`;
 }
 
-// Función principal para iniciar el proceso de cálculo de costos
-function calcularCosto() {
-    const trabajadorId = document.getElementById("id_trabajador").value;
-    const maquinaId = document.getElementById("id_maquina").value;
-    const materialId = document.getElementById("material").value;
-    const desperdicio = document.getElementById("desperdicio").value;
+async function calcularCosto() {
+    const datosObtenidos = {
+        trabajadores: [],
+        maquinas: [],
+        materiales: [],
+        valor_dolar: 0,
+    };
 
-    if (!trabajadorId || !maquinaId || !materialId || !desperdicio) {
-        alert("Por favor selecciona un trabajador, una máquina y un material.");
+    const trabajadorSelect = document.getElementById("id_trabajador");
+    const trabajadorIds = Array.from(trabajadorSelect.selectedOptions).map(
+        (option) => option.value
+    );
+
+    const maquinaSelect = document.getElementById("id_maquina");
+    const maquinaIds = Array.from(maquinaSelect.selectedOptions).map(
+        (option) => option.value
+    );
+
+    const materialIds = Array.from(
+        document.querySelectorAll('[id^="materiales"][name*="[id_material]"]')
+    ).map((input) => input.value);
+
+    if (!trabajadorIds.length || !maquinaIds.length || !materialIds.length) {
+        alert(
+            "Por favor selecciona al menos un trabajador, una máquina y un material."
+        );
         return;
     }
 
-    console.log("ID del trabajador seleccionado:", trabajadorId);
-    console.log("ID de la máquina seleccionada:", maquinaId);
-    console.log("ID del material seleccionado:", materialId);
-    console.log("Cantidad de Desperdicio en kilos:", desperdicio);
+    try {
+        const urlPrecioDolar = "/cotizacion";
+        const valorDolar = await obtenerPrecioDolar(urlPrecioDolar);
+        datosObtenidos.valor_dolar = valorDolar;
 
-    obtenerPrecioDolar(urlPrecioDolar).then(() => {
-        obtenerDatos(`/trabajadores/${trabajadorId}/datos`, "trabajador");
-        obtenerDatos(`/maquinas/${maquinaId}/datos`, "maquina");
-        obtenerDatos(`/materiales/${materialId}/datos`, "material");
+        // Obtener datos de trabajadores
+        for (const id of trabajadorIds) {
+            try {
+                const trabajador = await obtenerDatos(
+                    `/trabajadores/${id}/datos`,
+                    "trabajador"
+                );
+                if (
+                    trabajador &&
+                    trabajador.trabajador_id &&
+                    trabajador.trabajador_nombre
+                ) {
+                    datosObtenidos.trabajadores.push(trabajador);
+                }
+            } catch (error) {
+                console.error(
+                    `Error al obtener datos del trabajador ${id}:`,
+                    error
+                );
+            }
+        }
+
+        // Obtener datos de máquinas
+        for (const id of maquinaIds) {
+            try {
+                const maquina = await obtenerDatos(
+                    `/maquinas/${id}/datos`,
+                    "maquina"
+                );
+                if (maquina && maquina.costo && maquina.vida_util_anios) {
+                    datosObtenidos.maquinas.push(maquina);
+                }
+            } catch (error) {
+                console.error(
+                    `Error al obtener datos de la máquina ${id}:`,
+                    error
+                );
+            }
+        }
+
+        // Obtener datos de materiales
+        for (const id of materialIds) {
+            try {
+                const material = await obtenerDatos(
+                    `/materiales/${id}/datos`,
+                    "material"
+                );
+                if (
+                    material &&
+                    material.id &&
+                    material.nombre &&
+                    material.costo_por_unidad &&
+                    material.costo_por_gramo
+                ) {
+                    datosObtenidos.materiales.push(material);
+                }
+            } catch (error) {
+                console.error(
+                    `Error al obtener datos del material ${id}:`,
+                    error
+                );
+            }
+        }
+
+        // Calcular costos usando los datos obtenidos
+        await calcularCostos(datosObtenidos);
+    } catch (error) {
+        console.error("Error en el proceso de cálculo:", error);
+    }
+}
+
+function agregarEventoCambio(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.addEventListener("change", calcularCosto);
+    }
+}
+
+function agregarEventosCambioMateriales() {
+    const elementosMateriales = document.querySelectorAll(
+        '[name*="[cantidad_usada]"]'
+    );
+    elementosMateriales.forEach((elemento) => {
+        elemento.addEventListener("change", calcularCosto);
     });
 }
 
-// Hacer la función global para ser usada desde HTML
+const urlPrecioDolar = `/cotizacion`;
+
+async function obtenerPrecioDolar(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (!response.ok || !data.valor_dolar) {
+            throw new Error("No se pudo obtener el precio del dólar");
+        }
+
+        return data.valor_dolar;
+    } catch (error) {
+        console.error("Error al obtener el precio del dólar:", error);
+        throw error;
+    }
+}
+
+async function obtenerDatos(url, tipo, index = null) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(`No se pudo obtener los datos de ${tipo}`);
+        }
+
+        console.log(`Datos obtenidos de ${tipo} ${index}:`, data); // Agregado para depuración
+        return data;
+    } catch (error) {
+        console.error(`Error al obtener los datos de ${tipo}:`, error);
+        throw error;
+    }
+}
+
 window.calcularCosto = calcularCosto;

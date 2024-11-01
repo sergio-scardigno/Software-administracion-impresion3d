@@ -19,43 +19,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-document
-    .getElementById("materialForm")
-    .addEventListener("submit", async function (event) {
-        event.preventDefault(); // Evitar el envío inmediato del formulario
+// document
+//     .getElementById("materialForm")
+//     .addEventListener("submit", async function (event) {
+//         event.preventDefault(); // Evitar el envío inmediato del formulario
 
-        const moneda = document.getElementById("moneda").value;
-        const costoPorUnidadInput = document.getElementById("costo_por_unidad");
-        let costoPorUnidad = parseFloat(costoPorUnidadInput.value);
+//         const moneda = document.getElementById("moneda").value;
+//         const costoPorUnidadInput = document.getElementById("costo_por_unidad");
+//         let costoPorUnidad = parseFloat(costoPorUnidadInput.value);
 
-        if (moneda === "ARS") {
-            try {
-                const valorDolar = await obtenerPrecioDolar("/cotizacion");
-                if (valorDolar) {
-                    // Convertir el costo a dólares
-                    const costoEnDolares = costoPorUnidad / valorDolar;
-                    costoPorUnidadInput.value = costoEnDolares.toFixed(2); // Actualizar el valor en el campo
+//         if (moneda === "ARS") {
+//             try {
+//                 const valorDolar = await obtenerPrecioDolar("/cotizacion");
+//                 if (valorDolar) {
+//                     // Convertir el costo a dólares
+//                     const costoEnDolares = costoPorUnidad / valorDolar;
+//                     costoPorUnidadInput.value = costoEnDolares.toFixed(2); // Actualizar el valor en el campo
 
-                    // Cambiar la moneda a USD antes de enviar
-                    document.getElementById("moneda").value = "USD";
-                }
-            } catch (error) {
-                console.error("Error al convertir el precio a dólares:", error);
-                return; // No enviar el formulario si hay un error
-            }
+//                     // Cambiar la moneda a USD antes de enviar
+//                     document.getElementById("moneda").value = "USD";
+//                 }
+//             } catch (error) {
+//                 console.error("Error al convertir el precio a dólares:", error);
+//                 return; // No enviar el formulario si hay un error
+//             }
+//         }
+
+//         // Enviar el formulario
+//         this.submit();
+//     });
+
+// Función asíncrona para obtener el precio del dólar
+async function obtenerPrecioDolar(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (!response.ok || !data.valor_dolar) {
+            throw new Error("No se pudo obtener el precio del dólar");
         }
 
-        // Enviar el formulario
-        this.submit();
-    });
-
-async function obtenerPrecioDolar(url) {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (!response.ok || !data.valor_dolar) {
-        throw new Error("No se pudo obtener el precio del dólar");
+        return data.valor_dolar;
+    } catch (error) {
+        console.error("Error al obtener el precio del dólar:", error);
+        throw error; // Re-lanzar el error para que pueda ser manejado en la llamada
     }
-
-    return data.valor_dolar;
 }
+
+// Hacer la función global
+window.obtenerPrecioDolar = obtenerPrecioDolar;

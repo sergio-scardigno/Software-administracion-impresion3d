@@ -35,7 +35,8 @@ class MaterialController extends Controller
             'nombre' => 'required|string|max:255',
             'costo_por_unidad' => 'required|numeric',
             'unidad_de_medida' => 'required|string|max:50',
-            'cantidad_de_material' => 'required|numeric'
+            'cantidad_de_material' => 'required|numeric',
+            'costo_por_gramo' => 'required|numeric'
         ]);
 
         Material::create($request->all());
@@ -56,15 +57,20 @@ class MaterialController extends Controller
         return view('materiales.edit', compact('material'));
     }
 
-    public function update(Request $request, Material $material)
+    public function update(Request $request, $id)
     {
+
+        // dd($request->all());
+
         $request->validate([
             'nombre' => 'required|string|max:255',
             'costo_por_unidad' => 'required|numeric',
             'unidad_de_medida' => 'required|string|max:50',
-            'cantidad_de_material' => 'required|numeric'
+            'cantidad_de_material' => 'required|numeric',
+            'costo_por_gramo' => 'required|numeric'
         ]);
 
+        $material = Material::findOrFail($id);
         $material->update($request->all());
 
         return redirect()->route('materiales.index')
@@ -91,6 +97,8 @@ class MaterialController extends Controller
                 'costo_por_unidad' => $material->costo_por_unidad,
                 'unidad_de_medida' => $material->unidad_de_medida,
                 'cantidad_de_material' => $material->cantidad_de_material,
+                'costo_por_gramo' =>  $material->costo_por_gramo
+
             ]);
         } else {
             return response()->json(['error' => 'Máquina no encontrada'], 404);

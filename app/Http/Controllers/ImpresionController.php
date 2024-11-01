@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Models\ImpresionMaquinaTrabajador;
 use App\Models\ImpresionMaterial;
 
+use Illuminate\Support\Carbon;
+
 class ImpresionController extends Controller
 {
     public function index()
@@ -35,7 +37,7 @@ class ImpresionController extends Controller
     public function store(Request $request)
     {
         // Paso 1: Verificar datos recibidos
-        // dd($request->all()); // Descomentar esta línea si necesitas verificar los datos recibidos
+        //dd($request->all()); // Descomentar esta línea si necesitas verificar los datos recibidos
     
         // Paso 2: Validación de datos
         $validatedData = $request->validate([
@@ -45,8 +47,9 @@ class ImpresionController extends Controller
             'id_trabajador' => 'required|array',
             'id_trabajador.*' => 'exists:trabajadores,id_trabajador',
     
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date',
+            'fecha_inicio' => 'date',
+            'fecha_fin' => 'date',
+
             'horas_impresion' => 'required|integer',
             'dimension_x' => 'required|numeric',
             'dimension_y' => 'required|numeric',
@@ -63,14 +66,25 @@ class ImpresionController extends Controller
         ]);
     
         // Paso 3: Verificar datos validados
-        // dd($validatedData);
+        //dd($validatedData);
     
         // Crear la nueva impresión
         $impresion = new Impresion();
         $impresion->id_maquina = $validatedData['id_maquina'][0];
         $impresion->id_trabajador = $validatedData['id_trabajador'][0];
-        $impresion->fecha_inicio = $validatedData['fecha_inicio'];
-        $impresion->fecha_fin = $validatedData['fecha_fin'];
+        
+
+        // Asignar la fecha de inicio como el momento actual en el formato adecuado
+        $impresion->fecha_inicio = Carbon::now()->format('Y-m-d H:i:s');
+
+        // Asegurarte de que horas_impresion es un número
+        $horasImpresion = (int) $validatedData['horas_impresion'];
+
+        // Calcular la fecha de fin sumando las horas de impresión a la fecha de inicio
+        $impresion->fecha_fin = Carbon::parse($impresion->fecha_inicio)
+            ->addHours($horasImpresion)
+            ->format('Y-m-d H:i:s');
+
         $impresion->horas_impresion = $validatedData['horas_impresion'];
         $impresion->dimension_x = $validatedData['dimension_x'];
         $impresion->dimension_y = $validatedData['dimension_y'];
@@ -80,27 +94,32 @@ class ImpresionController extends Controller
         $impresion->venta = $validatedData['venta'];
 
         // Asignar valores predeterminados
-        $impresion->costo_desperdicio = 0; // O asigna un valor calculado
-        $impresion->costo_total = 0; // O asigna un valor calculado
+        $impresion->costo_desperdicio = 0; // Inicializar el costo del desperdicio
+        $impresion->costo_total = 0; // Inicializar el costo total
 
-        // Calcular el costo de los materiales
+        // Calcular el costo de los materiales y el costo del desperdicio
         $costoMateriales = 0;
         foreach ($validatedData['materiales'] as $materialData) {
             $material = Material::find($materialData['id_material']);
-            $costoMaterial = $material->costo_por_unidad * $materialData['cantidad_usada'];
+            $costoMaterial = $material->costo_por_gramo * $materialData['cantidad_usada'];
             $costoMateriales += $costoMaterial;
-        }
-        $impresion->costo_materiales = $costoMateriales;
 
-        // Asignar el costo total (aquí podrías hacer una suma de todos los costos si es necesario)
-        $impresion->costo_total = $costoMateriales + $impresion->costo_desperdicio; // Ejemplo de cálculo de costo total
+            // Sumar el costo del desperdicio en cada iteración
+            $costoDesperdicioPorMaterial = $material->costo_por_gramo * $impresion->desperdicio;
+            $impresion->costo_desperdicio += $costoDesperdicioPorMaterial;
+        }
+
+        // Asignar el costo total
+        $impresion->costo_materiales = $costoMateriales;
+        $impresion->costo_total = $costoMateriales + $impresion->costo_desperdicio;
 
         // Guardar la impresión para obtener el ID
         $impresion->save();
 
+
     
         // Paso 6: Verificar si la impresión se guardó correctamente
-        // dd($impresion);
+        //dd($impresion);
     
         // Asociar materiales con la impresión
         foreach ($validatedData['materiales'] as $materialData) {
@@ -111,7 +130,7 @@ class ImpresionController extends Controller
             $impresionMaterial->id_impresion = $impresion->id_impresion;
             $impresionMaterial->id_material = $materialData['id_material'];
             $impresionMaterial->cantidad_usada = $materialData['cantidad_usada'];
-            $impresionMaterial->costo = Material::find($materialData['id_material'])->costo_por_unidad * $materialData['cantidad_usada'];
+            $impresionMaterial->costo = Material::find($materialData['id_material'])->costo_por_gramo * $materialData['cantidad_usada'];
             $impresionMaterial->save();
         }
     
@@ -138,20 +157,50 @@ class ImpresionController extends Controller
         return view('impresiones.show', compact('impresion'));
     }
 
-    public function edit(Impresion $impresion)
+    public function edit($id)
     {
+        $impresion = Impresion::find($id);
+        // Obtener todos los trabajadores, máquinas y materiales
         $trabajadores = Trabajador::all();
         $maquinas = Maquina::all();
-        $materiales = Material::all(); // Obtener todos los materiales
-        $impresion->load('materiales', 'maquinas', 'trabajadores'); // Cargar las relaciones actuales
-
-        return view('impresiones.edit', compact('impresion', 'trabajadores', 'maquinas', 'materiales'));
+        $materiales = Material::all();
+    
+        // Cargar las relaciones actuales de la impresión
+        $impresion->load('materiales', 'maquinas', 'trabajadores');
+    
+        // Mapear los materiales asociados para que sean fácilmente manejables en la vista
+        $materialesAsociados = $impresion->materiales->map(function ($material) {
+            return [
+                'id_material' => $material->pivot->id_material,
+                'cantidad_usada' => $material->pivot->cantidad_usada,
+                'costo' => $material->pivot->costo,
+            ];
+        });
+    
+        // Mapear las máquinas y trabajadores asociados para la vista
+        $maquinasAsociadas = $impresion->maquinas->pluck('id_maquina')->toArray();
+        $trabajadoresAsociados = $impresion->trabajadores->pluck('id_trabajador')->toArray();
+    
+        return view('impresiones.edit', compact(
+            'impresion',
+            'trabajadores',
+            'maquinas',
+            'materiales',
+            'materialesAsociados',
+            'maquinasAsociadas',
+            'trabajadoresAsociados'
+        ));
     }
+    
 
-    public function update(Request $request, Impresion $impresion)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        $impresion = Impresion::findOrFail($id);
+        
+        // Validación de datos
+        $validatedData = $request->validate([
             'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date',
             'horas_impresion' => 'required|integer',
             'dimension_x' => 'required|numeric',
             'dimension_y' => 'required|numeric',
@@ -169,25 +218,56 @@ class ImpresionController extends Controller
             'materiales.*.cantidad_usada' => 'required|numeric',
             'materiales.*.costo' => 'required|numeric',
         ]);
-
-        $impresion->update($request->all());
-
+    
+        // Actualizar los datos de la impresión
+        $impresion->fecha_inicio = $validatedData['fecha_inicio'];
+        $impresion->fecha_fin = $validatedData['fecha_fin'];
+        $impresion->horas_impresion = $validatedData['horas_impresion'];
+        $impresion->dimension_x = $validatedData['dimension_x'];
+        $impresion->dimension_y = $validatedData['dimension_y'];
+        $impresion->dimension_z = $validatedData['dimension_z'];
+        $impresion->desperdicio = $validatedData['desperdicio'];
+        $impresion->cantidad_unidades = $validatedData['cantidad_unidades'];
+        $impresion->venta = $validatedData['venta'];
+    
+        // Recalcular el costo de los materiales y el costo del desperdicio
+        $costoMateriales = 0;
+        $costoDesperdicio = 0;
+    
+        foreach ($validatedData['materiales'] as $materialData) {
+            $material = Material::find($materialData['id_material']);
+            $costoMaterial = $material->costo_por_gramo * $materialData['cantidad_usada'];
+            $costoMateriales += $costoMaterial;
+    
+            // Sumar el costo del desperdicio en cada iteración
+            $costoDesperdicio += $material->costo_por_gramo * $impresion->desperdicio;
+        }
+    
+        // Asignar los costos recalculados
+        $impresion->costo_materiales = $costoMateriales;
+        $impresion->costo_desperdicio = $costoDesperdicio;
+        $impresion->costo_total = $costoMateriales + $costoDesperdicio;
+    
+        // Guardar la impresión actualizada
+        $impresion->save();
+    
         // Sincronizar máquinas y trabajadores asociados con la impresión
-        $impresion->maquinas()->sync($request->maquinas);
-        $impresion->trabajadores()->sync($request->trabajadores);
-
+        $impresion->maquinas()->sync($validatedData['maquinas']);
+        $impresion->trabajadores()->sync($validatedData['trabajadores']);
+    
         // Sincronizar materiales asociados con la impresión
         $syncData = [];
-        foreach ($request->materiales as $materialData) {
+        foreach ($validatedData['materiales'] as $materialData) {
             $syncData[$materialData['id_material']] = [
                 'cantidad_usada' => $materialData['cantidad_usada'],
                 'costo' => $materialData['costo'],
             ];
         }
         $impresion->materiales()->sync($syncData);
-
+    
         return redirect()->route('impresiones.index')->with('success', 'Impresión actualizada con éxito.');
     }
+    
 
     public function destroy(Impresion $impresion)
     {

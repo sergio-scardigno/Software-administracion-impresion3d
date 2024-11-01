@@ -13,7 +13,7 @@ class Material extends Model
 
     protected $primaryKey = 'id_material';
 
-    protected $fillable = ['nombre', 'costo_por_unidad', 'unidad_de_medida', 'cantidad_de_material'];
+    protected $fillable = ['nombre', 'costo_por_unidad', 'unidad_de_medida', 'costo_por_gramo', 'cantidad_de_material'];
 
     public function impresiones()
     {

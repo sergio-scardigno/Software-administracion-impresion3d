@@ -19,19 +19,21 @@
                 <div class="form-group">
                     <label for="moneda">Moneda</label>
                     <select class="form-control" id="moneda" name="moneda" required>
-                        <option value="USD">Dólares</option>
                         <option value="ARS">Pesos</option>
+                        <option value="USD">Dólares</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="unidad_de_medida">Unidad de Medida</label>
+                    {{-- <label for="unidad_de_medida">Unidad de Medida</label>
                     <select class="form-control" id="unidad_de_medida" name="unidad_de_medida" required>
                         <option value="KG">KG</option>
                         <option value="GR">GR</option>
-                    </select>
+                    </select> --}}
+                    <input type="hidden" id="unidad_de_medida" name="unidad_de_medida" value="GR">
+
                 </div>        
                 <div class="form-group">
-                    <label for="cantidad_de_material">Cantidad de Material en KG o GR</label>
+                    <label for="cantidad_de_material">Cantidad de Material en GR</label>
                     <input type="text" class="form-control" id="cantidad_de_material" name="cantidad_de_material" list="cantidades" required>
                     <datalist id="cantidades">
                             <option value="250" label="250 GR">
@@ -50,6 +52,9 @@
                             <option value="15000" label="15 KG"> <!-- 15000 GR -->
                     </datalist>
                 </div>
+
+                <!-- Campo oculto para el costo por kilo en dólares -->
+                <input type="hidden" id="costo_por_gramo" name="costo_por_gramo">
                 
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
@@ -69,4 +74,4 @@
 </div>
 @endsection
 
-@vite(['resources/js/conversion-precios-ARS-USD.js', 'resources/js/consulta-precios.js' ])
+@vite(['resources/js/conversion-precios-ARS-USD.js', 'resources/js/consulta-precios.js' ,'resources/js/costo-por-gramo.js' ])

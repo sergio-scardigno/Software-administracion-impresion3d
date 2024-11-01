@@ -11,6 +11,7 @@ export default defineConfig({
                 "resources/js/costos.js",
                 "resources/js/conversion-precios-ARS-USD.js",
                 "resources/js/consulta-precios.js",
+                "resources/js/costo-por-gramo.js",
             ],
             refresh: true,
         }),
